@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Ignore data text files
+datos.txt
