@@ -119,7 +119,7 @@ int ArbolRojoNegro::insertarDato(int valor, int llave)
     }
 }
 
-int ArbolRojoNegro::insertarDatoRecursivo(Hoja*, Connector*){
+int ArbolRojoNegro::insertarDatoRecursivo(Hoja* dato, Connector* actual){
 
 }
 
