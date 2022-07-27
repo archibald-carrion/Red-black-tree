@@ -7,25 +7,30 @@ class ArbolRojoNegro{
 
         class Connector{
             public:
-                static const int negro = 1;
-                static const int rojo = 0;
+                static const char negro = 1;
+                static const char rojo = 0;
                 int llave;
                 ~Connector();
+                static const char tipoNodo = 1;
+                static const char tipoHoja = 0;
+                char tipo;  	//differenciar si es nodo o hoja --> nodo = 0, hoja = 1
         };
 
         class Nodo:public Connector{
             public:
                 Connector* hijos[2];   //0 es izquierda, 1 es derecha 
-                int color;
+                char color;
                 void colorFlip();
                 Nodo(Nodo*);
-                Nodo(Connector* losHijos[2], int color);
+                static const char hijoIzquierdo = 0;
+                static const char hijoDerecho = 1;
+                Nodo(Connector* losHijos[2], char color, int llaveTemporal);
         };
 
         class Hoja:public Connector{
             public:
                 int valor;
-                Hoja(int);
+                Hoja(int, int);
         };
 
         class Iterador{

@@ -12,12 +12,20 @@ ArbolRojoNegro::Nodo::Nodo(Nodo *)
 {
 }
 
-ArbolRojoNegro::Nodo::Nodo(Connector *losHijos[2], int color)
+ArbolRojoNegro::Nodo::Nodo(Connector *losHijos[2], char color, int llaveTemporal)
 {
+    this->llave = llaveTemporal;
+    this->tipo = tipoNodo;
+    this->hijos[hijoIzquierdo] = losHijos[hijoIzquierdo];
+    this->hijos[hijoDerecho] = losHijos[hijoDerecho];
+    this->color = color;
 }
 
-ArbolRojoNegro::Hoja::Hoja(int)
+ArbolRojoNegro::Hoja::Hoja(int valorTemporal, int llaveTemporal)
 {
+    this->valor = valorTemporal;
+    this->llave = llaveTemporal;
+    this->tipo = tipoHoja;
 }
 
 ArbolRojoNegro::Iterador::Iterador(Connector *)
@@ -57,7 +65,11 @@ ArbolRojoNegro::~ArbolRojoNegro()
 
 int ArbolRojoNegro::insertarDato(int valor, int llave)
 {
-    
+    Hoja *dato = new Hoja(valor, llave);
+    //recorrer el arbol, hacer el color flip si se occupa, sino, no
+    //insertarHoja
+    //verificar que sea un arbol RN
+    //si no lo es entonces hacer rotacion y arreglar colores
 }
 
 void ArbolRojoNegro::CCR(Nodo *)
