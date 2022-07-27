@@ -55,8 +55,9 @@ ArbolRojoNegro::~ArbolRojoNegro()
 {
 }
 
-int ArbolRojoNegro::insertarDato(int, int)
+int ArbolRojoNegro::insertarDato(int valor, int llave)
 {
+    
 }
 
 void ArbolRojoNegro::CCR(Nodo *)
