@@ -22,9 +22,9 @@ class ArbolRojoNegro{
                 char color;
                 void colorFlip();
                 Nodo(Nodo*);
-                static const char hijoIzquierdo = 0;
-                static const char hijoDerecho = 1;
-                Nodo(Connector* losHijos[2], char color, int llaveTemporal);
+                static const char ladoIzquierdo = 0;
+                static const char ladoDerecho = 1;
+                Nodo(Connector*, Connector*, char color, int llaveTemporal);
         };
 
         class Hoja:public Connector{
@@ -60,6 +60,7 @@ class ArbolRojoNegro{
         ArbolRojoNegro();    //constructor
         ~ArbolRojoNegro();   //desctructor 
         int insertarDato(int,int);
+        int insertarDatoRecursivo(Hoja*, Connector*);
         Iterador begin();
         Iterador end();
 };

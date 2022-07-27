@@ -12,12 +12,12 @@ ArbolRojoNegro::Nodo::Nodo(Nodo *)
 {
 }
 
-ArbolRojoNegro::Nodo::Nodo(Connector *nuevoHijoDerecho, Connector* nuevoHijoIzquierdo, char color, int llaveTemporal)
+ArbolRojoNegro::Nodo::Nodo(Connector *hijoDerecho, Connector* hijoIzquierdo, char color, int llaveTemporal)
 {
     this->llave = llaveTemporal;
     this->tipo = tipoNodo;
-    this->hijos[hijoIzquierdo] = nuevoHijoIzquierdo;
-    this->hijos[hijoDerecho] = nuevoHijoDerecho;
+    this->hijos[ladoIzquierdo] = hijoIzquierdo;
+    this->hijos[ladoDerecho] = hijoDerecho;
     this->color = color;
 }
 
@@ -73,24 +73,54 @@ int ArbolRojoNegro::insertarDato(int valor, int llave)
     //insertarHoja
     //verificar que sea un arbol RN
     //si no lo es entonces hacer rotacion y arreglar colores
+
+    //caso trivial 1 -> arbol vacio
     if(raiz == 0){
         raiz = (Connector*)dato;
         return 1;
     }
+    //caso trivial 2 -> arbol solo tiene 1 hoja
     if(raiz->tipo == Connector::tipoHoja){
         int nuevaLlave;
+        Nodo* nodo ;
         if(raiz->llave > llave){
-            nuevaLlave = llave;
+            nodo = new Nodo(dato, raiz, Connector::negro, llave);
         } else{
-            nuevaLlave = raiz->llave;
-        }
-        
-        Nodo* nodo = new Nodo()
+            nodo = new Nodo(raiz, dato, Connector::negro, raiz->llave);
+        } 
+        raiz = nodo;
+        return 1;
     }
-    Connector* posicionActual = raiz;
-    while(posicionActual->tipo == Connector::tipoNodo){
+    //caso trivial 3 -> llave ya existe en la raiz
+    
 
+    Nodo* nodo = static_cast<Nodo*>(raiz);
+    
+    if(raiz->llave > llave){        //move to right
+        
+        if(nodo->hijos[Nodo::ladoDerecho]){
+            return insertarDatoRecursivo(dato, nodo->hijos[Nodo::ladoDerecho]);
+        } else{
+            nodo->hijos[Nodo::ladoDerecho] = dato;
+            return 1;
+        }  
+
+    } else if(raiz->llave < llave){  
+                               //move to left
+        if(nodo->hijos[Nodo::ladoIzquierdo]){
+            return insertarDatoRecursivo(dato, nodo->hijos[Nodo::ladoIzquierdo]);
+        } else{
+            nodo->hijos[Nodo::ladoIzquierdo] = dato;
+            return 1;
+        }
+
+    } else{
+        return 0;
     }
+}
+
+int ArbolRojoNegro::insertarDatoRecursivo(Hoja*, Connector*){
+
 }
 
 void ArbolRojoNegro::CCR(Nodo *)
