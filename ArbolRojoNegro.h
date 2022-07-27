@@ -2,7 +2,7 @@
 #define _ARBOLROJONEGRO_
 
 class ArbolRojoNegro{
-    friend ArbolRojoNegro;
+    //friend ArbolRojoNegro;
     private:
 
         class Connector{
@@ -30,12 +30,14 @@ class ArbolRojoNegro{
 
         class Iterador{
             public:
+                Iterador(Connector*);
+                Iterador(const Iterador&);
+                Iterador operator=(const Iterador&);
+                void operator==(const Iterador&);
                 Connector* actual;
                 Iterador operator++();
                 Iterador operator--();
                 Hoja* operator*();
-
-
         };
 
         Connector raiz;
