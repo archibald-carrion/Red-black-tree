@@ -22,13 +22,39 @@ class ArbolRojoNegro{
                 Nodo(Connector* losHijos[2], int color);
         };
 
-        class Hoja:Connector{
+        class Hoja:public Connector{
             public:
                 int valor;
                 Hoja(int);
         };
 
+        class Iterador{
+            public:
+                Connector* actual;
+                Iterador operator++();
+                Iterador operator--();
+                Hoja* operator*();
+
+
+        };
+
+        Connector raiz;
+        //pila -> mejor O
+
+        void CCR(Nodo*);     //Cambio Color Raiz Roja a Negra
+        void CF(Nodo*);      //Color-Flip
+        void RSI(Nodo*);     //Rotación Simple Izquierda
+        void RSD(Nodo*);     //Rotación simple derecha
+        void RDI(Nodo*);     //Rotación doble Izquierda
+        void RDD(Nodo*);     //Rotación doble derecha
+        void RC(Nodo*);      //Re-Coloreo
+        void IH(Hoja*);      //Insertar Hoja
     public:
+        ArbolRojoNegro();    //constructor
+        ~ArbolRojoNegro();   //desctructor 
+        int insertarDato(int,int);
+        Iterador begin();
+        Iterador end();
 };
 
 #endif
