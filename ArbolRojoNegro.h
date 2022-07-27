@@ -45,7 +45,7 @@ class ArbolRojoNegro{
                 Hoja* operator*();
         };
 
-        Connector raiz;
+        Connector* raiz;
         //pila -> mejor O
 
         void CCR(Nodo*);     //Cambio Color Raiz Roja a Negra

@@ -12,12 +12,12 @@ ArbolRojoNegro::Nodo::Nodo(Nodo *)
 {
 }
 
-ArbolRojoNegro::Nodo::Nodo(Connector *losHijos[2], char color, int llaveTemporal)
+ArbolRojoNegro::Nodo::Nodo(Connector *nuevoHijoDerecho, Connector* nuevoHijoIzquierdo, char color, int llaveTemporal)
 {
     this->llave = llaveTemporal;
     this->tipo = tipoNodo;
-    this->hijos[hijoIzquierdo] = losHijos[hijoIzquierdo];
-    this->hijos[hijoDerecho] = losHijos[hijoDerecho];
+    this->hijos[hijoIzquierdo] = nuevoHijoIzquierdo;
+    this->hijos[hijoDerecho] = nuevoHijoDerecho;
     this->color = color;
 }
 
@@ -57,19 +57,40 @@ ArbolRojoNegro::Hoja *ArbolRojoNegro::Iterador::operator*()
 
 ArbolRojoNegro::ArbolRojoNegro()
 {
+    raiz = 0;
 }
 
 ArbolRojoNegro::~ArbolRojoNegro()
 {
+    //desctructor recursivo
 }
 
 int ArbolRojoNegro::insertarDato(int valor, int llave)
 {
     Hoja *dato = new Hoja(valor, llave);
+    
     //recorrer el arbol, hacer el color flip si se occupa, sino, no
     //insertarHoja
     //verificar que sea un arbol RN
     //si no lo es entonces hacer rotacion y arreglar colores
+    if(raiz == 0){
+        raiz = (Connector*)dato;
+        return 1;
+    }
+    if(raiz->tipo == Connector::tipoHoja){
+        int nuevaLlave;
+        if(raiz->llave > llave){
+            nuevaLlave = llave;
+        } else{
+            nuevaLlave = raiz->llave;
+        }
+        
+        Nodo* nodo = new Nodo()
+    }
+    Connector* posicionActual = raiz;
+    while(posicionActual->tipo == Connector::tipoNodo){
+
+    }
 }
 
 void ArbolRojoNegro::CCR(Nodo *)
