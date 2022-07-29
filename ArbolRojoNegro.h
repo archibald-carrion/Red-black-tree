@@ -82,7 +82,7 @@ class ArbolRojoNegro
         void RSD(Nodo**);     //Rotación simple derecha
         void RDI(Nodo**);     //Rotación doble Izquierda
         void RDD(Nodo**);     //Rotación doble derecha
-        void RC(Nodo**);      //Re-Coloreo
+        void RC(Nodo*);      //Re-Coloreo
 
         int IH_recursivo(const int&, const int&, Connector*);
 
