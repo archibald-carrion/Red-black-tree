@@ -56,11 +56,11 @@ class ArbolRojoNegro{
         void RDD(Nodo*);     //Rotación doble derecha
         void RC(Nodo*);      //Re-Coloreo
         void IH(Hoja*);      //Insertar Hoja
+        int insertarDatoRecursivo(Hoja*, Connector*);
     public:
         ArbolRojoNegro();    //constructor
         ~ArbolRojoNegro();   //desctructor 
         int insertarDato(int,int);
-        int insertarDatoRecursivo(Hoja*, Connector*);
         Iterador begin();
         Iterador end();
 };

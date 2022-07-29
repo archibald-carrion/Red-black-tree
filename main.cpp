@@ -30,8 +30,9 @@ void lector(string *arrayString, string nombreArchivo)
     ifstream file;
     file.open(nombreArchivo);
     unsigned int counter = 0;
-    while (file >> word)
+    while(!file.eof())
     {
+        file>>word;
         arrayString[counter] = word;
         ++counter;
     }
