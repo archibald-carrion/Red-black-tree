@@ -19,6 +19,8 @@ int main()
     //llenar vector STL
 
     //guardamos en archivo de texto
+
+    delete[] arrayString;
     return 0;
 }
 
