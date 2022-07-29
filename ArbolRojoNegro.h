@@ -22,6 +22,18 @@ class ArbolRojoNegro
                 virtual ~Connector();
         };
 
+        class Hoja : public Connector
+        {
+            public:
+
+                int valor;
+                Hoja* next;
+                Hoja* previous;
+
+                Hoja(const int&, const int&, Hoja* = 0, Hoja* = 0);
+                ~Hoja(){};
+        };
+
         class Nodo : public Connector
         {
             public:
@@ -35,21 +47,9 @@ class ArbolRojoNegro
                 ~Nodo()
                 {if(hijos[0] != 0) delete hijos[0]; if(hijos[1] != 0) delete hijos[1];};
 
-                Nodo(Connector*, Connector*, char color);
+                Nodo(Hoja*, Hoja*, char color);
 
                 void colorFlipLocal();
-        };
-
-        class Hoja : public Connector
-        {
-            public:
-
-                int valor;
-                Hoja* next;
-                Hoja* previous;
-
-                Hoja(const int&, const int&, Hoja* = 0, Hoja* = 0);
-                ~Hoja(){};
         };
 
         class Iterador
@@ -76,15 +76,14 @@ class ArbolRojoNegro
         Connector* raiz; //pila -> mejor O
         Hoja* hojaMinima;
 
-        void CCR();     //Cambio Color Raiz Roja a Negra
-        void CF(Nodo**);      //Color-Flip
-        void RSI(Nodo**);     //Rotación Simple Izquierda
-        void RSD(Nodo**);     //Rotación simple derecha
-        void RDI(Nodo**);     //Rotación doble Izquierda
-        void RDD(Nodo**);     //Rotación doble derecha
+        void CF(Nodo*);      //Color-Flip
+        void RSI(Connector**);     //Rotación Simple Izquierda
+        void RSD(Connector**);     //Rotación simple derecha
+        void RDI(Connector**);     //Rotación doble Izquierda
+        void RDD(Connector**);     //Rotación doble derecha
         void RC(Nodo*);      //Re-Coloreo
 
-        char verificarRotacion(Nodo**);
+        char verificarRotacion(Connector**);
 
     public:
 

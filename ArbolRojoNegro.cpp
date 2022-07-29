@@ -10,17 +10,20 @@ void ArbolRojoNegro::Nodo::colorFlipLocal()
     return;
 }
 
-ArbolRojoNegro::Nodo::Nodo(Connector* hijoIzquierdo, Connector *hijoDerecho, char color)
+ArbolRojoNegro::Nodo::Nodo(Hoja* hijaIzquierda, Hoja* hijaDerecha, char color)
 {
     this->tipo = tipoNodo;
     this->color = color;
 
-    this->hijos[ladoIzquierdo] = hijoIzquierdo;
-    this->hijos[ladoDerecho] = hijoDerecho;
+    this->hijos[ladoIzquierdo] = hijaIzquierda;
+    this->hijos[ladoDerecho] = hijaDerecha;
 
-    if(hijoIzquierdo == 0 || hijoDerecho == 0) this->llave = int();
-    else if(hijoIzquierdo->llave < hijoDerecho->llave) this->llave = hijoIzquierdo->llave;
-    else this->llave = hijoDerecho->llave;
+    if(hijaIzquierda == 0 || hijaDerecha == 0) this->llave = int();
+    else if(hijaIzquierda->llave < hijaDerecha->llave) this->llave = hijaIzquierda->llave;
+    else this->llave = hijaDerecha->llave;
+
+    hijaIzquierda->next = hijaDerecha;
+    hijaDerecha->previous = hijaIzquierda;
 }
 
 // HOJA
@@ -105,18 +108,19 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     if(raiz->tipo == Connector::tipoHoja)
     {
         Hoja* nuevaHoja = new Hoja(valor, llave);
+        Hoja* raizComoHoja = dynamic_cast<Hoja*>(raiz); // Casting es seguro porque raiz era una Hoja
         Nodo* nuevoNodo;
 
         // En ambos casos el nuevo nodo raíz será negro de una vez
         if(llave < raiz->llave) 
         {
-            nuevoNodo = new Nodo(nuevaHoja, raiz, Connector::negro);
+            nuevoNodo = new Nodo(nuevaHoja, raizComoHoja, Connector::negro);
             hojaMinima = nuevaHoja;
         }
         else 
         {
-            nuevoNodo = new Nodo(raiz, nuevaHoja, Connector::negro);
-            hojaMinima = dynamic_cast<Hoja*>(raiz); // Casting es seguro porque raiz era una Hoja
+            nuevoNodo = new Nodo(raizComoHoja, nuevaHoja, Connector::negro);
+            hojaMinima = raizComoHoja; 
         }
 
         raiz = (Connector*) nuevoNodo;
@@ -144,10 +148,11 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
         if(connectorHijoActual->llave == llave) return 0;
 
         Hoja* nuevaHoja = new Hoja(valor, llave);
+        Hoja* hojaHijaActual = dynamic_cast<Hoja*>(connectorHijoActual);
         Nodo* nuevoNodo;
 
-        if(llave < nodoActual->llave) nuevoNodo = new Nodo(nuevaHoja, connectorHijoActual, Connector::rojo);
-        else nuevoNodo = new Nodo(connectorHijoActual, nuevaHoja, Connector::rojo);
+        if(llave < nodoActual->llave) nuevoNodo = new Nodo(nuevaHoja, hojaHijaActual, Connector::rojo);
+        else nuevoNodo = new Nodo(hojaHijaActual, nuevaHoja, Connector::rojo);
 
         nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
         if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;
@@ -167,15 +172,30 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     
     while(connectorHijoActual->tipo == Connector::tipoNodo)
     {
-        if(bandera == 0) bandera += 1;
-        else if(bandera == 1)
+        // Antes de descender, verificaremos si ambos hermanos son rojos, si acaso es necesario realizar un color flip en el nodo actual
+        Connector* hermanoTemporal;
+        if(ladoActual == Nodo::ladoIzquierdo) hermanoTemporal = nodoActual->hijos[Nodo::ladoDerecho];
+        else hermanoTemporal = nodoActual->hijos[Nodo::ladoIzquierdo];
+
+        if(hermanoTemporal->tipo == Connector::tipoNodo) // Comparación es segura porque la estructura del árbol evita connectores nulos
+        {
+            // Castings son seguros porque se garantizó que ambos conectores existen y son nodos
+            Nodo* nodoHermano = dynamic_cast<Nodo*>(hermanoTemporal);
+            Nodo* nodoHijo = dynamic_cast<Nodo*>(connectorHijoActual);
+
+            if(nodoHermano->color == Nodo::rojo && nodoHijo->color == Nodo::rojo) CF(nodoActual);
+        }
+
+        // Ahora sí, podemos descender.
+        if(bandera == 0) bandera += 1; // El primer descenso es especial, está garantizado, y no se puede conocer el bisabuelo, por lo que no se calcula
+        else if(bandera == 1) // El segundo descenso también es especial, pues el bisabuelo por fuerza es la raíz
         {
             bis = &(raiz);
             lado_desfasado_1 = ladoActual;
 
             bandera += 1;
         }
-        else
+        else // El resto de descensos son fácilmente iterables
         {
             bis_desfasado = bis;
             lado_desfasado_2 = lado_desfasado_1;
@@ -198,13 +218,41 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     if(llave == connectorHijoActual->llave) return 0; // Llave ya preexistente
 
     Nodo* nuevoNodo;
+    Hoja* hojaHijaActual = dynamic_cast<Hoja*>(connectorHijoActual);
     Hoja* nuevaHoja = new Hoja(valor, llave);
 
-    if(llave < connectorHijoActual->llave) nuevoNodo = new Nodo(nuevaHoja, connectorHijoActual, Connector::rojo);
-    else nuevoNodo = new Nodo(connectorHijoActual, nuevaHoja, Connector::rojo);
+    if(llave < connectorHijoActual->llave) nuevoNodo = new Nodo(nuevaHoja, hojaHijaActual, Connector::rojo);
+    else nuevoNodo = new Nodo(hojaHijaActual, nuevaHoja, Connector::rojo);
 
     nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
     if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;
+
+    // Realizamos la rotación necesaria, si acaso
+    switch (verificarRotacion(bis))
+    {
+        case char(0):
+            /* code */
+            break;
+
+        case char(1):
+            RSI(bis);
+            break;
+
+        case char(2):
+            RSD(bis);
+            break;
+
+        case char(3):
+            RDI(bis);
+            break;
+
+        case char(4):
+            RDD(bis);
+            break;
+        
+        default:
+            break;
+    }
 
     return 1;
 }
@@ -214,121 +262,155 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 //	2-> RSD
 //	3-> RDI
 //	4-> RDD
-char ArbolRojoNegro::verificarRotacion(Nodo**bisabuelo)
+char ArbolRojoNegro::verificarRotacion(Connector** bisabuelo)
 {
-	Nodo* padre = **bisabuelo;
-	if(padre -> hijos[0] -> tipo == Connector::tipoNodo && dynamic_cast<Nodo*>( padre -> hijos[0]) -> color == Connector::rojo)
-	{					// hijo izquierdo es rojo
-		if(padre -> hijos[0] -> hijos[0] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[0] -> hijos[0]) -> color == Connector::rojo)
-		{				// hijo izquierdo del hijo izquierdo es rojo 
-			return '2';	// rotacion simple derecha
-		} else if(padre -> hijos[0] -> hijos[1] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[0] -> hijos[1]) -> color == Connector::rojo)
-		{				// hijo derecho del hijo izquierdo es rojo
-			return '4';	// rotacion doble derecha
-		} else
-		{				// hijo izquierdo es rojo pero nieto no lo es
-			return '0';
-		}
-	} else if(padre -> hijos[1] -> tipo == Connector::tipoNodo && dynamic_cast<Nodo*>( padre -> hijos[1]) -> color == Connector::rojo)
-	{					// hijo derecho es rojo
-		if(padre -> hijos[1] -> hijos[0] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[1] -> hijos[0]) -> color == Connector::rojo)
-		{				// hijo izquierdo del hijo derecho es rojo 
-			return '3';	//rotacion doble izquierda
-		} else if(padre -> hijos[1] -> hijos[1] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[1] -> hijos[1]) -> color == Connector::rojo)
-		{				// hijo derecho del hijo derecho es rojo
-			return '1';	// rotacion simple izquierda
-		} else
-		{				// hijo derecho es rojo pero nieto no lo es
-			return '0';
-		}
-	} else {
-		return '0';
-	}
-}
+    Nodo* padre = dynamic_cast<Nodo*>(*bisabuelo);
 
-//se pasa la raiz a negro
-void ArbolRojoNegro::CCR()
-{
-    dynamic_cast<Nodo*>(raiz) -> colorFlipLocal();
-    return;
+	if(padre->hijos[0] -> tipo == Connector::tipoNodo)
+	{					
+        Nodo* nodoHijoIzquierdo = dynamic_cast<Nodo*>(padre->hijos[0]);
+
+        if(nodoHijoIzquierdo-> color == Connector::rojo) // Nodo hijo izquierdo es rojo
+        {
+            if(nodoHijoIzquierdo -> hijos[0] -> tipo == Connector::tipoNodo)
+            {				
+                Nodo* nietoHijoIzquierdo = dynamic_cast<Nodo*>(nodoHijoIzquierdo->hijos[0]);
+
+                if(nietoHijoIzquierdo-> color == Connector::rojo) return char(2);	// hijo izquierdo del hijo izquierdo es rojo 
+                // rotacion simple derecha
+            }
+            
+            else if(nodoHijoIzquierdo -> hijos[1] -> tipo == Connector::tipoNodo)
+            {				
+                Nodo* nietoHijoDerecho = dynamic_cast<Nodo*>(nodoHijoIzquierdo->hijos[1]);
+
+                if(nietoHijoDerecho-> color == Connector::rojo) return char(4);	// hijo derecho del hijo izquierdo es rojo 
+                // rotacion doble derecha
+            }
+        }
+	} 
+    
+    else if(padre->hijos[1] -> tipo == Connector::tipoNodo)
+	{
+		Nodo* nodoHijoDerecho = dynamic_cast<Nodo*>(padre->hijos[1]);
+
+        if(nodoHijoDerecho-> color == Connector::rojo) // Nodo hijo derecho es rojo
+        {
+            if(nodoHijoDerecho -> hijos[0] -> tipo == Connector::tipoNodo)
+            {				
+                Nodo* nietoHijoIzquierdo = dynamic_cast<Nodo*>(nodoHijoDerecho->hijos[0]);
+
+                if(nietoHijoIzquierdo-> color == Connector::rojo) return char(3);	// hijo izquierdo del hijo derecho es rojo 
+                // rotacion doble izquierda
+            }
+            
+            else if(nodoHijoDerecho -> hijos[1] -> tipo == Connector::tipoNodo)
+            {				
+                Nodo* nietoHijoDerecho = dynamic_cast<Nodo*>(nodoHijoDerecho->hijos[1]);
+
+                if(nietoHijoDerecho-> color == Connector::rojo) return char(1);	// hijo derecho del hijo derecho es rojo 
+                // rotacion simple izquierda
+            }
+            
+            else return char(1); // hijo izquierdo es rojo pero nieto no lo es
+        }
+	} 
+    
+    // Si ninguna rotación se debe realizar (el criterio de ninguna se cumple completamente) entonces devolvemos 0
+    return char(0);
 }
 
 //se cambia color padre rojo y hijos a negro
-void ArbolRojoNegro::CF(Nodo** padre)
+void ArbolRojoNegro::CF(Nodo* padre)
 {
     if(padre = 0) return; // Código defensivo
 
     // Casting se asume seguro porque padre debe ser un nodo
-    Nodo* nodoPadre = dynamic_cast<Nodo*>(*padre);
-	nodoPadre -> colorFlipLocal();
+	if(padre != raiz) padre -> colorFlipLocal();
 
     // Se asume que el árbol minimal de nodos existe, y ningulo de los dos hijos es nulo u hoja
-    dynamic_cast<Nodo*>(nodoPadre->hijos[0]) -> colorFlipLocal();
-    dynamic_cast<Nodo*>(nodoPadre->hijos[1]) -> colorFlipLocal();
+    dynamic_cast<Nodo*>(padre->hijos[0]) -> colorFlipLocal();
+    dynamic_cast<Nodo*>(padre->hijos[1]) -> colorFlipLocal();
 }
 
 // Rotaciones simples
-void ArbolRojoNegro::RSI(Nodo** bis)
+void ArbolRojoNegro::RSI(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
+    Nodo* nodoBis = dynamic_cast<Nodo*>(*bis);
 
     // Casting se asume seguro porque bisabuelo debe apuntar a un nodo
-    Nodo* nuevoPadre = dynamic_cast<Nodo *>((* bis)->hijos[1]);
+    Nodo* nuevoPadre = dynamic_cast<Nodo *>(nodoBis->hijos[1]);
 
     // Se asume que la cadena de nodos existe, y ningulo es nulo
-    (* bis)->hijos[1] = nuevoPadre->hijos[0];
+    nodoBis->hijos[1] = nuevoPadre->hijos[0];
     nuevoPadre->hijos[0] = (* bis);
+
     (* bis) = nuevoPadre;
+    RC(nodoBis);
 
     return;
 }
 
-void ArbolRojoNegro::RSD(Nodo** bis)
+void ArbolRojoNegro::RSD(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
+    Nodo* nodoBis = dynamic_cast<Nodo*>(*bis);
 
     // Casting se asume seguro porque bisabuelo debe apuntar a un nodo
-    Nodo* nuevoPadre = dynamic_cast<Nodo *>((* bis)->hijos[0]);
+    Nodo* nuevoPadre = dynamic_cast<Nodo *>(nodoBis->hijos[0]);
 
     // Se asume que la cadena de nodos existe, y ningulo es nulo
-    (* bis)->hijos[0] = nuevoPadre->hijos[1];
+    nodoBis->hijos[0] = nuevoPadre->hijos[1];
     nuevoPadre->hijos[1] = (* bis);
+
     (* bis) = nuevoPadre;
+    RC(nodoBis);
 
     return;
 }
 
 // Rotaciones dobles
-void ArbolRojoNegro::RDI(Nodo ** bis)
+void ArbolRojoNegro::RDI(Connector** bis)
 {
-    Nodo* antiguoPadre = dynamic_cast<Nodo * >((* bis)->hijos[1]);
+    if(bis == 0) return; // Código defensivo
+    Nodo* nodoBis = dynamic_cast<Nodo*>(*bis);
+
+    Nodo* antiguoPadre = dynamic_cast<Nodo * >(nodoBis->hijos[1]);
     Nodo* nuevoPadre = dynamic_cast<Nodo * >(antiguoPadre->hijos[0]);
 
-    (*bis)->hijos[1] = nuevoPadre->hijos[0];
+    nodoBis->hijos[1] = nuevoPadre->hijos[0];
     antiguoPadre->hijos[0] = nuevoPadre->hijos[1];
     nuevoPadre->hijos[0] = (* bis);
     nuevoPadre->hijos[1] = antiguoPadre;
+    
     (*bis) = nuevoPadre;
+    RC(nodoBis);
 
-    RC(*bis);
+    return;
 }
 
-void ArbolRojoNegro::RDD(Nodo ** bis)
+void ArbolRojoNegro::RDD(Connector** bis)
 {
-    Nodo * antiguoPadre = dynamic_cast<Nodo*>((*bis)->hijos[0]);
+    if(bis == 0) return; // Código defensivo
+    Nodo* nodoBis = dynamic_cast<Nodo*>(*bis);
+
+    Nodo * antiguoPadre = dynamic_cast<Nodo*>(nodoBis->hijos[0]);
     Nodo * nuevoPadre = dynamic_cast<Nodo*>(antiguoPadre->hijos[1]);
 
-    (*bis)->hijos[0] = nuevoPadre->hijos[1];
+    nodoBis->hijos[0] = nuevoPadre->hijos[1];
     antiguoPadre->hijos[1] = nuevoPadre->hijos[0];
     nuevoPadre->hijos[1] = (*bis);
     nuevoPadre->hijos[0] = antiguoPadre;
+    
     (*bis) = nuevoPadre;
+    RC(nodoBis);
 
-    RC(*bis);
+    return;
 }
 
 // Se cambia color padre para negro, y el color de los hijos para rojo
-void ArbolRojoNegro::RC(Nodo *padre)
+void ArbolRojoNegro::RC(Nodo* padre)
 {
     if(padre = 0) return; // Código defensivo
     padre -> color = Connector::negro;
