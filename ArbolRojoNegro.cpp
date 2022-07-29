@@ -10,13 +10,17 @@ void ArbolRojoNegro::Nodo::colorFlipLocal()
     return;
 }
 
-ArbolRojoNegro::Nodo::Nodo(Connector* hijoIzquierdo, Connector *hijoDerecho, char color, int llaveTemporal)
+ArbolRojoNegro::Nodo::Nodo(Connector* hijoIzquierdo, Connector *hijoDerecho, char color)
 {
-    this->llave = llaveTemporal;
     this->tipo = tipoNodo;
+    this->color = color;
+
     this->hijos[ladoIzquierdo] = hijoIzquierdo;
     this->hijos[ladoDerecho] = hijoDerecho;
-    this->color = color;
+
+    if(hijoIzquierdo == 0 || hijoDerecho == 0) this->llave = int();
+    else if(hijoIzquierdo->llave < hijoDerecho->llave) this->llave = hijoIzquierdo->llave;
+    else this->llave = hijoDerecho->llave;
 }
 
 // HOJA
@@ -106,12 +110,12 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
         // En ambos casos el nuevo nodo raíz será negro de una vez
         if(llave < raiz->llave) 
         {
-            nuevoNodo = new Nodo(nuevaHoja, raiz, Connector::negro, llave);
+            nuevoNodo = new Nodo(nuevaHoja, raiz, Connector::negro);
             hojaMinima = nuevaHoja;
         }
         else 
         {
-            nuevoNodo = new Nodo(raiz, nuevaHoja, Connector::negro, raiz->llave);
+            nuevoNodo = new Nodo(raiz, nuevaHoja, Connector::negro);
             hojaMinima = dynamic_cast<Hoja*>(raiz); // Casting es seguro porque raiz era una Hoja
         }
 
@@ -120,7 +124,7 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     }
 
     // Casting es seguro, confirmamos que raiz no es nula (caso trivial 1) y es nodo (caso trivial 3)
-    Nodo* nodoActual = static_cast<Nodo*>(raiz);
+    Nodo* nodoActual = dynamic_cast<Nodo*>(raiz);
     char ladoActual = 0;
     
     // Conocemos si debemos mover a la izquierda o derecha. La comparación es segura porque porque raíz no es nula (caso trivial 1)
@@ -142,8 +146,8 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
         Hoja* nuevaHoja = new Hoja(valor, llave);
         Nodo* nuevoNodo;
 
-        if(llave < nodoActual->llave) nuevoNodo = new Nodo(nuevaHoja, connectorHijoActual, Connector::rojo, llave);
-        else nuevoNodo = new Nodo(connectorHijoActual, nuevaHoja, Connector::rojo, raiz->llave);
+        if(llave < nodoActual->llave) nuevoNodo = new Nodo(nuevaHoja, connectorHijoActual, Connector::rojo);
+        else nuevoNodo = new Nodo(connectorHijoActual, nuevaHoja, Connector::rojo);
 
         nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
         if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;
@@ -157,15 +161,29 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     // Vamos a descender en el árbol hasta el hijo correspondiente al nodo actual sea una hoja
     unsigned char bandera = 0; // Existe un desfase de dos entre el nodo actual y el bisabuelo, no todas las iteraciones determinan el bisabuelo
     Connector** bis = 0; // Ubicación del bisasbuelo
-    Connector** bis_1 = 0;  // bis desfasado 1 paso
-    Connector** bis_2 = 0; // bis desfasado 2 pasos
-    for
-    (
-        bis = &raiz; 
-        connectorHijoActual->tipo == Connector::tipoNodo; 
-        nodoActual = dynamic_cast<Nodo*>(connectorHijoActual)
-    )
+    Connector** bis_desfasado = 0; // Bis desfasado 1 paso
+    char lado_desfasado_1 = 0; // Lado desfasado 1 paso
+    char lado_desfasado_2 = 0; // Lado desfasado 2 pasos
+    
+    while(connectorHijoActual->tipo == Connector::tipoNodo)
     {
+        if(bandera == 0) bandera += 1;
+        else if(bandera == 1)
+        {
+            bis = &(raiz);
+            lado_desfasado_1 = ladoActual;
+
+            bandera += 1;
+        }
+        else
+        {
+            bis_desfasado = bis;
+            lado_desfasado_2 = lado_desfasado_1;
+
+            bis = &(dynamic_cast<Nodo*>(*bis_desfasado)->hijos[lado_desfasado_2]);
+            lado_desfasado_1 = ladoActual;
+        }
+
         nodoActual = dynamic_cast<Nodo*>(connectorHijoActual);
 
         if(llave == nodoActual->llave) return 0; // Llave preexistente, no vale la pena seguir bajando
@@ -174,17 +192,58 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
         else ladoActual = Nodo::ladoDerecho;
 
         connectorHijoActual = nodoActual->hijos[ladoActual];
-
-        if(bandera == 0) bis = &raiz;
-        else bis = &()
     }
-    Connector** bis = &raiz;
 
+    // Tenemos que el connector siguiente es una hoja, y podemos realizar una inserción
+    if(llave == connectorHijoActual->llave) return 0; // Llave ya preexistente
+
+    Nodo* nuevoNodo;
+    Hoja* nuevaHoja = new Hoja(valor, llave);
+
+    if(llave < connectorHijoActual->llave) nuevoNodo = new Nodo(nuevaHoja, connectorHijoActual, Connector::rojo);
+    else nuevoNodo = new Nodo(connectorHijoActual, nuevaHoja, Connector::rojo);
+
+    nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
+    if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;
+
+    return 1;
 }
 
-int ArbolRojoNegro::IH_recursivo(const int& valor, const int& llave, Connector* actual)
+//	0-> no rotacion
+// 	1-> RSI
+//	2-> RSD
+//	3-> RDI
+//	4-> RDD
+char ArbolRojoNegro::verificarRotacion(Nodo**bisabuelo)
 {
-
+	Nodo* padre = **bisabuelo;
+	if(padre -> hijos[0] -> tipo == Connector::tipoNodo && dynamic_cast<Nodo*>( padre -> hijos[0]) -> color == Connector::rojo)
+	{					// hijo izquierdo es rojo
+		if(padre -> hijos[0] -> hijos[0] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[0] -> hijos[0]) -> color == Connector::rojo)
+		{				// hijo izquierdo del hijo izquierdo es rojo 
+			return '2';	// rotacion simple derecha
+		} else if(padre -> hijos[0] -> hijos[1] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[0] -> hijos[1]) -> color == Connector::rojo)
+		{				// hijo derecho del hijo izquierdo es rojo
+			return '4';	// rotacion doble derecha
+		} else
+		{				// hijo izquierdo es rojo pero nieto no lo es
+			return '0';
+		}
+	} else if(padre -> hijos[1] -> tipo == Connector::tipoNodo && dynamic_cast<Nodo*>( padre -> hijos[1]) -> color == Connector::rojo)
+	{					// hijo derecho es rojo
+		if(padre -> hijos[1] -> hijos[0] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[1] -> hijos[0]) -> color == Connector::rojo)
+		{				// hijo izquierdo del hijo derecho es rojo 
+			return '3';	//rotacion doble izquierda
+		} else if(padre -> hijos[1] -> hijos[1] -> tipo == Connector::tipoNodo &&  dynamic_cast<Nodo*>( padre -> hijos[1] -> hijos[1]) -> color == Connector::rojo)
+		{				// hijo derecho del hijo derecho es rojo
+			return '1';	// rotacion simple izquierda
+		} else
+		{				// hijo derecho es rojo pero nieto no lo es
+			return '0';
+		}
+	} else {
+		return '0';
+	}
 }
 
 //se pasa la raiz a negro

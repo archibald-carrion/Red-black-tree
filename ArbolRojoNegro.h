@@ -35,7 +35,7 @@ class ArbolRojoNegro
                 ~Nodo()
                 {if(hijos[0] != 0) delete hijos[0]; if(hijos[1] != 0) delete hijos[1];};
 
-                Nodo(Connector*, Connector*, char color, int llaveTemporal);
+                Nodo(Connector*, Connector*, char color);
 
                 void colorFlipLocal();
         };
@@ -84,7 +84,7 @@ class ArbolRojoNegro
         void RDD(Nodo**);     //Rotación doble derecha
         void RC(Nodo*);      //Re-Coloreo
 
-        int IH_recursivo(const int&, const int&, Connector*);
+        char verificarRotacion(Nodo**);
 
     public:
 
