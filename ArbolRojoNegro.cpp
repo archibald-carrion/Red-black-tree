@@ -130,7 +130,6 @@ void ArbolRojoNegro::CCR()
 //se cambia color padre rojo y hijos a negro
 void ArbolRojoNegro::CF(Nodo **padre)
 {   
-    
     Nodo* nodoPadre = dynamic_cast<Nodo*>(*padre);
 	nodoPadre -> colorFlipLocal();
     if(nodoPadre->hijos[0]->tipo == Connector::tipoNodo){
