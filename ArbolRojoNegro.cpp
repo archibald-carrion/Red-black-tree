@@ -121,12 +121,24 @@ int ArbolRojoNegro::insertarDatoRecursivo(Hoja* dato, Connector* actual)
 
 }
 
+//se pasa la raiz a negro
 void ArbolRojoNegro::CCR()
 {
+	dynamic_cast<Nodo*>(raiz) -> colorFlipLocal();
 }
 
-void ArbolRojoNegro::CF(Nodo ** bis)
-{
+//se cambia color padre rojo y hijos a negro
+void ArbolRojoNegro::CF(Nodo **padre)
+{   
+    
+    Nodo* nodoPadre = dynamic_cast<Nodo*>(*padre);
+	nodoPadre -> colorFlipLocal();
+    if(nodoPadre->hijos[0]->tipo == Connector::tipoNodo){
+	    dynamic_cast<Nodo*>(nodoPadre->hijos[0]) -> colorFlipLocal();
+    }
+    if(nodoPadre->hijos[1]->tipo == Connector::tipoNodo){
+	    dynamic_cast<Nodo*>(nodoPadre->hijos[1]) -> colorFlipLocal();
+    }
 }
 
 void ArbolRojoNegro::RSI(Nodo ** bis)
@@ -145,9 +157,19 @@ void ArbolRojoNegro::RDD(Nodo ** bis)
 {
 }
 
-void ArbolRojoNegro::RC(Nodo ** bis)
+//se cambia color padre para negro y colro hjijos para rojo
+void ArbolRojoNegro::RC(Nodo **padre)
 {
+    Nodo* nodoPadre = dynamic_cast<Nodo*>(*padre);
+    nodoPadre -> color = Connector::negro;
+    if(nodoPadre->hijos[0]->tipo == Connector::tipoNodo){
+	    dynamic_cast<Nodo*>(nodoPadre->hijos[0]) -> color = Connector::rojo;
+    }
+    if(nodoPadre->hijos[1]->tipo == Connector::tipoNodo){
+	    dynamic_cast<Nodo*>(nodoPadre->hijos[1]) -> color = Connector::rojo;
+    }
 }
+
 
 void ArbolRojoNegro::IH(Hoja *)
 {
