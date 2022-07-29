@@ -42,7 +42,10 @@ class ArbolRojoNegro
         class Hoja : public Connector
         {
             public:
+
                 int valor;
+                Hoja* next;
+                Hoja* previous;
 
                 Hoja(const int&, const int&);
         };
@@ -85,7 +88,7 @@ class ArbolRojoNegro
         ArbolRojoNegro();    //constructor
         ~ArbolRojoNegro();   //desctructor 
 
-        int insertarDato(int,int);
+        int insertarDato(const int&,const int&);
         
         Iterador begin();
         Iterador end();

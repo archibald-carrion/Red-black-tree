@@ -1,5 +1,7 @@
 #include "ArbolRojoNegro.h"
 
+// NODO
+
 void ArbolRojoNegro::Nodo::colorFlipLocal()
 {
     if(this->color == (char)0) this->color = (char)1;
@@ -16,6 +18,8 @@ ArbolRojoNegro::Nodo::Nodo(Connector* hijoIzquierdo, Connector *hijoDerecho, cha
     this->hijos[ladoDerecho] = hijoDerecho;
     this->color = color;
 }
+
+// HOJA
 
 ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal)
 {
@@ -50,17 +54,17 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--()
 const int& ArbolRojoNegro::Iterador::operator*()
 {return this->actual->valor;}
 
+// ARBOL ROJO-NEGRO
+
 ArbolRojoNegro::ArbolRojoNegro()
-{
-    raiz = 0;
-}
+{raiz = 0;}
 
 ArbolRojoNegro::~ArbolRojoNegro()
 {
     //desctructor recursivo
 }
 
-int ArbolRojoNegro::insertarDato(int valor, int llave)
+int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 {
     //recorrer el arbol, hacer el color flip si se occupa, sino, no
     //insertarHoja
