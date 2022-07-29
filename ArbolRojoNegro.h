@@ -32,7 +32,8 @@ class ArbolRojoNegro
                 char color;
 
                 Nodo();
-                ~Nodo();
+                ~Nodo()
+                {if(hijos[0] != 0) delete hijos[0]; if(hijos[1] != 0) delete hijos[1];};
 
                 Nodo(Connector*, Connector*, char color, int llaveTemporal);
 
@@ -47,7 +48,8 @@ class ArbolRojoNegro
                 Hoja* next;
                 Hoja* previous;
 
-                Hoja(const int&, const int&);
+                Hoja(const int&, const int&, Hoja* = 0, Hoja* = 0);
+                ~Hoja(){};
         };
 
         class Iterador
@@ -58,6 +60,7 @@ class ArbolRojoNegro
             public:
                 Iterador(Hoja*);
                 Iterador(const Iterador&);
+                ~Iterador();
 
                 Iterador operator=(const Iterador&);
                 bool operator==(const Iterador&);
@@ -71,6 +74,7 @@ class ArbolRojoNegro
         };
 
         Connector* raiz; //pila -> mejor O
+        Hoja* hojaMinima;
 
         void CCR();     //Cambio Color Raiz Roja a Negra
         void CF(Nodo**);      //Color-Flip
@@ -79,9 +83,8 @@ class ArbolRojoNegro
         void RDI(Nodo**);     //Rotación doble Izquierda
         void RDD(Nodo**);     //Rotación doble derecha
         void RC(Nodo**);      //Re-Coloreo
-        void IH(Hoja*);      //Insertar Hoja
 
-        int insertarDatoRecursivo(Hoja*, Connector*);
+        int IH_recursivo(const int&, const int&, Connector*);
 
     public:
 

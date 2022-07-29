@@ -21,10 +21,13 @@ ArbolRojoNegro::Nodo::Nodo(Connector* hijoIzquierdo, Connector *hijoDerecho, cha
 
 // HOJA
 
-ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal)
+ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal, Hoja* next, Hoja* previous)
 {
     this->valor = valorTemporal;
     this->llave = llaveTemporal;
+
+    this->next = next;
+    this->previous = previous;
 
     this->tipo = tipoHoja;
 }
@@ -44,83 +47,94 @@ bool ArbolRojoNegro::Iterador::operator==(const Iterador& iteradorComparable)
 {return (this->actual == iteradorComparable.actual);}
 
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++()
-{
-}
+{actual = actual->next;}
 
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--()
-{
-}
+{actual = actual->previous;}
 
 const int& ArbolRojoNegro::Iterador::operator*()
 {return this->actual->valor;}
 
+ArbolRojoNegro::Iterador ArbolRojoNegro::begin()
+{return Iterador(hojaMinima);}
+
+ArbolRojoNegro::Iterador ArbolRojoNegro::end()
+{return Iterador(0);}
+
 // ARBOL ROJO-NEGRO
 
 ArbolRojoNegro::ArbolRojoNegro()
-{raiz = 0;}
+{
+    raiz = 0;
+    hojaMinima = 0;
+}
 
 ArbolRojoNegro::~ArbolRojoNegro()
 {
-    //desctructor recursivo
+    // Desctructor recursivo, en cadena
+    if(raiz) delete raiz;
 }
 
 int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 {
-    //recorrer el arbol, hacer el color flip si se occupa, sino, no
-    //insertarHoja
-    //verificar que sea un arbol RN
-    //si no lo es entonces hacer rotacion y arreglar colores
+    // Recorrer el arbol, hacer el color flip si se occupa, sino, no
+    // InsertarHoja
+    // Verificar que sea un arbol RN
+    // Si no lo es entonces hacer rotacion y arreglar colores
 
-    // Caso trivial 1 -> Llave ya existe en la raiz
-    if(raiz->llave == llave) return 0;
-
-    Hoja *dato = new Hoja(valor, llave);
-
-    // Caso trivial 2 -> Arbol vacio
+    // Caso trivial 1 -> Arbol vacio
     if(raiz == 0)
     {
+        Hoja *dato = new Hoja(valor, llave);
+
         raiz = (Connector*) dato;
+        hojaMinima = dato;
+
         return 1;
     }
+
+    // Caso trivial 2 -> Llave ya existe en la raiz. Comparacion es segura porque raiz no es nula (caso trivial 1)
+    if(raiz->llave == llave) return 0;
     
-    // Caso trivial 3 -> Arbol solo tiene 1 hoja
+    // Caso trivial 3 -> Arbol solo tiene 1 hoja. 
+    // Comparacion es necesaria porque raiz tiene llave distinta (caso trivial 2), y es segura porque raiz no es nula (caso trivial 1)
     if(raiz->tipo == Connector::tipoHoja)
     {
+        Hoja *dato = new Hoja(valor, llave);
+
         Nodo* nodo;
 
-        if(raiz->llave > llave) nodo = new Nodo(dato, raiz, Connector::negro, llave); 
-        else nodo = new Nodo(raiz, dato, Connector::negro, raiz->llave);
+        if(raiz->llave > llave) 
+        {
+            nodo = new Nodo(dato, raiz, Connector::negro, llave);
+            hojaMinima = dato;
+        }
+        else 
+        {
+            nodo = new Nodo(raiz, dato, Connector::negro, raiz->llave);
+            hojaMinima = dynamic_cast<Hoja*>(raiz); // Casting es seguro porque raiz era una Hoja
+        }
 
         raiz = (Connector*) nodo;
         return 1;
     }
 
-    Nodo* nodo = static_cast<Nodo*>(raiz); // Casting es seguro, confirmamos que raiz es nodo
+    // Casting es seguro, confirmamos que raiz no es nula (caso trivial 1) y es nodo (caso trivial 3)
+    Nodo* nodoActual = static_cast<Nodo*>(raiz);
+    char ladoActual = 0;
     
-    if(raiz->llave > llave){        //move to right
-        
-        if(nodo->hijos[Nodo::ladoDerecho]){
-            return insertarDatoRecursivo(dato, nodo->hijos[Nodo::ladoDerecho]);
-        } else{
-            nodo->hijos[Nodo::ladoDerecho] = dato;
-            return 1;
-        }  
+    // Conocemos si debemos mover a la izquierda o derecha. La comparación es segura porque porque raíz no es nula (caso trivial 1)
+    // Confirmamos que si no es mayor entonces es menor. No puede ser igual (caso trivial 2)
+    if(llave < raiz->llave) ladoActual = Nodo::ladoIzquierdo;
+    else ladoActual = Nodo::ladoDerecho;
 
-    } else if(raiz->llave < llave){  
-                               //move to left
-        if(nodo->hijos[Nodo::ladoIzquierdo]){
-            return insertarDatoRecursivo(dato, nodo->hijos[Nodo::ladoIzquierdo]);
-        } else{
-            nodo->hijos[Nodo::ladoIzquierdo] = dato;
-            return 1;
-        }
-
-    } else{
-        return 0;
-    }
+    // Caso semi-trivial -> Connector siguiente es Hoja
+    if(nodoActual->hijos[ladoActual]->tipo == Connector::tipoHoja)
+    {}
+    
 }
 
-int ArbolRojoNegro::insertarDatoRecursivo(Hoja* dato, Connector* actual)
+int ArbolRojoNegro::IH_recursivo(const int& valor, const int& llave, Connector* actual)
 {
 
 }
@@ -171,17 +185,4 @@ void ArbolRojoNegro::RC(Nodo **padre)
     if(nodoPadre->hijos[1]->tipo == Connector::tipoNodo){
 	    dynamic_cast<Nodo*>(nodoPadre->hijos[1]) -> color = Connector::rojo;
     }
-}
-
-
-void ArbolRojoNegro::IH(Hoja *)
-{
-}
-
-ArbolRojoNegro::Iterador ArbolRojoNegro::begin()
-{
-}
-
-ArbolRojoNegro::Iterador ArbolRojoNegro::end()
-{
 }
