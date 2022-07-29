@@ -50,10 +50,10 @@ class ArbolRojoNegro
         class Iterador
         {
             private:
-                Connector* actual;
+                Hoja* actual;
 
             public:
-                Iterador(Connector*);
+                Iterador(Hoja*);
                 Iterador(const Iterador&);
 
                 Iterador operator=(const Iterador&);

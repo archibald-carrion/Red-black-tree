@@ -2,8 +2,8 @@
 
 void ArbolRojoNegro::Nodo::colorFlipLocal()
 {
-    if(color == (char)0) color = (char)1;
-    else color = (char)0; 
+    if(this->color == (char)0) this->color = (char)1;
+    else this->color = (char)0; 
 
     return;
 }
@@ -21,24 +21,23 @@ ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal)
 {
     this->valor = valorTemporal;
     this->llave = llaveTemporal;
+
     this->tipo = tipoHoja;
 }
 
-ArbolRojoNegro::Iterador::Iterador(Connector *)
-{
-}
+// ITERADOR
 
-ArbolRojoNegro::Iterador::Iterador(const Iterador &)
-{
-}
+ArbolRojoNegro::Iterador::Iterador(Hoja* hojaIterable)
+{this->actual = hojaIterable;}
 
-ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator=(const Iterador &)
-{
-}
+ArbolRojoNegro::Iterador::Iterador(const Iterador& iteradorCopiable)
+{this->actual = iteradorCopiable.actual;}
 
-bool ArbolRojoNegro::Iterador::operator==(const Iterador &)
-{
-}
+ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator=(const Iterador& iteradorCopiable)
+{this->actual = iteradorCopiable.actual;}
+
+bool ArbolRojoNegro::Iterador::operator==(const Iterador& iteradorComparable)
+{return (this->actual == iteradorComparable.actual);}
 
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++()
 {
@@ -47,9 +46,9 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++()
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--()
 {
 }
+
 const int& ArbolRojoNegro::Iterador::operator*()
-{
-}
+{return this->actual->valor;}
 
 ArbolRojoNegro::ArbolRojoNegro()
 {
