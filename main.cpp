@@ -24,15 +24,19 @@ int main()
     return 0;
 }
 
-void lector(string *arrayString, string nombreArchivo)
+void lector(string* arrayString, string nombreArchivo)
 {
     string word;
     ifstream file;
+
     file.open(nombreArchivo);
     unsigned int counter = 0;
-    while (file >> word)
+
+    while(file.eof())
     {
+        file >> word;
         arrayString[counter] = word;
+        
         ++counter;
     }
 }

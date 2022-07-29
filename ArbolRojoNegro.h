@@ -1,66 +1,92 @@
 #ifndef _ARBOLROJONEGRO_
 #define _ARBOLROJONEGRO_
 
-class ArbolRojoNegro{
-    //friend ArbolRojoNegro;
+class ArbolRojoNegro
+{
     private:
 
-        class Connector{
+        class Connector
+        {
             public:
+
+                int llave;
+                char tipo;  	//differenciar si es nodo o hoja --> nodo = 0, hoja = 1
+
                 static const char negro = 1;
                 static const char rojo = 0;
-                int llave;
-                ~Connector();
+                
                 static const char tipoNodo = 1;
                 static const char tipoHoja = 0;
-                char tipo;  	//differenciar si es nodo o hoja --> nodo = 0, hoja = 1
+
+                Connector();
+                virtual ~Connector();
         };
 
-        class Nodo:public Connector{
+        class Nodo : public Connector
+        {
             public:
-                Connector* hijos[2];   //0 es izquierda, 1 es derecha 
-                char color;
-                void colorFlip();
-                Nodo(Nodo*);
                 static const char ladoIzquierdo = 0;
                 static const char ladoDerecho = 1;
+
+                Connector* hijos[2];   //0 es izquierda, 1 es derecha 
+                char color;
+
+                Nodo();
+                ~Nodo();
+
                 Nodo(Connector*, Connector*, char color, int llaveTemporal);
+
+                void colorFlipLocal();
         };
 
-        class Hoja:public Connector{
+        class Hoja : public Connector
+        {
             public:
                 int valor;
-                Hoja(int, int);
+
+                Hoja(const int&, const int&);
         };
 
-        class Iterador{
+        class Iterador
+        {
+            private:
+                Connector* actual;
+
             public:
                 Iterador(Connector*);
                 Iterador(const Iterador&);
+
                 Iterador operator=(const Iterador&);
-                void operator==(const Iterador&);
-                Connector* actual;
+                bool operator==(const Iterador&);
+
                 Iterador operator++();
+                Iterador operator++(int);
+
                 Iterador operator--();
-                Hoja* operator*();
+
+                const int& operator*();
         };
 
-        Connector* raiz;
-        //pila -> mejor O
+        Connector* raiz; //pila -> mejor O
 
-        void CCR(Nodo*);     //Cambio Color Raiz Roja a Negra
-        void CF(Nodo*);      //Color-Flip
-        void RSI(Nodo*);     //Rotación Simple Izquierda
-        void RSD(Nodo*);     //Rotación simple derecha
-        void RDI(Nodo*);     //Rotación doble Izquierda
-        void RDD(Nodo*);     //Rotación doble derecha
-        void RC(Nodo*);      //Re-Coloreo
+        void CCR();     //Cambio Color Raiz Roja a Negra
+        void CF(Nodo**);      //Color-Flip
+        void RSI(Nodo**);     //Rotación Simple Izquierda
+        void RSD(Nodo**);     //Rotación simple derecha
+        void RDI(Nodo**);     //Rotación doble Izquierda
+        void RDD(Nodo**);     //Rotación doble derecha
+        void RC(Nodo**);      //Re-Coloreo
         void IH(Hoja*);      //Insertar Hoja
+
+        int insertarDatoRecursivo(Hoja*, Connector*);
+
     public:
+
         ArbolRojoNegro();    //constructor
         ~ArbolRojoNegro();   //desctructor 
+
         int insertarDato(int,int);
-        int insertarDatoRecursivo(Hoja*, Connector*);
+        
         Iterador begin();
         Iterador end();
 };

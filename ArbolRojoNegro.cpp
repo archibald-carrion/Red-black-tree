@@ -1,18 +1,14 @@
 #include "ArbolRojoNegro.h"
 
-ArbolRojoNegro::Connector::~Connector()
+void ArbolRojoNegro::Nodo::colorFlipLocal()
 {
+    if(color == (char)0) color = (char)1;
+    else color = (char)0; 
+
+    return;
 }
 
-void ArbolRojoNegro::Nodo::colorFlip()
-{
-}
-
-ArbolRojoNegro::Nodo::Nodo(Nodo *)
-{
-}
-
-ArbolRojoNegro::Nodo::Nodo(Connector *hijoDerecho, Connector* hijoIzquierdo, char color, int llaveTemporal)
+ArbolRojoNegro::Nodo::Nodo(Connector* hijoIzquierdo, Connector *hijoDerecho, char color, int llaveTemporal)
 {
     this->llave = llaveTemporal;
     this->tipo = tipoNodo;
@@ -21,7 +17,7 @@ ArbolRojoNegro::Nodo::Nodo(Connector *hijoDerecho, Connector* hijoIzquierdo, cha
     this->color = color;
 }
 
-ArbolRojoNegro::Hoja::Hoja(int valorTemporal, int llaveTemporal)
+ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal)
 {
     this->valor = valorTemporal;
     this->llave = llaveTemporal;
@@ -40,7 +36,7 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator=(const Iterador &)
 {
 }
 
-void ArbolRojoNegro::Iterador::operator==(const Iterador &)
+bool ArbolRojoNegro::Iterador::operator==(const Iterador &)
 {
 }
 
@@ -51,7 +47,7 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++()
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--()
 {
 }
-ArbolRojoNegro::Hoja *ArbolRojoNegro::Iterador::operator*()
+const int& ArbolRojoNegro::Iterador::operator*()
 {
 }
 
@@ -67,34 +63,36 @@ ArbolRojoNegro::~ArbolRojoNegro()
 
 int ArbolRojoNegro::insertarDato(int valor, int llave)
 {
-    Hoja *dato = new Hoja(valor, llave);
-    
     //recorrer el arbol, hacer el color flip si se occupa, sino, no
     //insertarHoja
     //verificar que sea un arbol RN
     //si no lo es entonces hacer rotacion y arreglar colores
 
-    //caso trivial 1 -> arbol vacio
-    if(raiz == 0){
-        raiz = (Connector*)dato;
-        return 1;
-    }
-    //caso trivial 2 -> arbol solo tiene 1 hoja
-    if(raiz->tipo == Connector::tipoHoja){
-        int nuevaLlave;
-        Nodo* nodo ;
-        if(raiz->llave > llave){
-            nodo = new Nodo(dato, raiz, Connector::negro, llave);
-        } else{
-            nodo = new Nodo(raiz, dato, Connector::negro, raiz->llave);
-        } 
-        raiz = nodo;
-        return 1;
-    }
-    //caso trivial 3 -> llave ya existe en la raiz
-    
+    // Caso trivial 1 -> Llave ya existe en la raiz
+    if(raiz->llave == llave) return 0;
 
-    Nodo* nodo = static_cast<Nodo*>(raiz);
+    Hoja *dato = new Hoja(valor, llave);
+
+    // Caso trivial 2 -> Arbol vacio
+    if(raiz == 0)
+    {
+        raiz = (Connector*) dato;
+        return 1;
+    }
+    
+    // Caso trivial 3 -> Arbol solo tiene 1 hoja
+    if(raiz->tipo == Connector::tipoHoja)
+    {
+        Nodo* nodo;
+
+        if(raiz->llave > llave) nodo = new Nodo(dato, raiz, Connector::negro, llave); 
+        else nodo = new Nodo(raiz, dato, Connector::negro, raiz->llave);
+
+        raiz = (Connector*) nodo;
+        return 1;
+    }
+
+    Nodo* nodo = static_cast<Nodo*>(raiz); // Casting es seguro, confirmamos que raiz es nodo
     
     if(raiz->llave > llave){        //move to right
         
@@ -119,35 +117,36 @@ int ArbolRojoNegro::insertarDato(int valor, int llave)
     }
 }
 
-int ArbolRojoNegro::insertarDatoRecursivo(Hoja* dato, Connector* actual){
+int ArbolRojoNegro::insertarDatoRecursivo(Hoja* dato, Connector* actual)
+{
 
 }
 
-void ArbolRojoNegro::CCR(Nodo *)
+void ArbolRojoNegro::CCR()
 {
 }
 
-void ArbolRojoNegro::CF(Nodo *)
+void ArbolRojoNegro::CF(Nodo ** bis)
 {
 }
 
-void ArbolRojoNegro::RSI(Nodo *)
+void ArbolRojoNegro::RSI(Nodo ** bis)
 {
 }
 
-void ArbolRojoNegro::RSD(Nodo *)
+void ArbolRojoNegro::RSD(Nodo ** bis)
 {
 }
 
-void ArbolRojoNegro::RDI(Nodo *)
+void ArbolRojoNegro::RDI(Nodo ** bis)
 {
 }
 
-void ArbolRojoNegro::RDD(Nodo *)
+void ArbolRojoNegro::RDD(Nodo ** bis)
 {
 }
 
-void ArbolRojoNegro::RC(Nodo *)
+void ArbolRojoNegro::RC(Nodo ** bis)
 {
 }
 
