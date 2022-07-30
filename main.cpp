@@ -127,10 +127,12 @@ void probarArbol()
     int valor = 0;
     int llave = 0;
 
-    for(unsigned int i = 0; i < 8; ++i)
+    for(unsigned int i = 0; i < 20; ++i)
     {
         std::cin>>valor;
         std::cin>>llave;
+
+        std::cout << "Dato a insertar es " << valor << " , llave es " << llave << std::endl;
         arbolito.insertarDato(valor, llave);
     }
 
@@ -153,6 +155,11 @@ void probarArbol()
         if(i_previo == arbolito.end()) std::cout << "NULO" << std::endl;
         else std::cout << *i_previo << std::endl;
     }
+
+    std::cout << "///////////////////////" << std::endl;
+
+    for(ArbolRojoNegro::Iterador i = arbolito.begin(); i != arbolito.end(); ++i)
+    {std::cout << *i << " " << std::endl;}
 }
 
 int main()
