@@ -9,6 +9,7 @@
 
 #include <chrono>						//para medir tiempo
 #include <utility>						//para usar move semantics y evitar copias largas
+#include <iomanip>						//para notacion cientifica y decimales arbitrarios
 #include "Predicado.h"					//para el prueba vector
 
 using namespace std;
@@ -26,6 +27,7 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 			existe = 1; //Sí esta en el vector
 		}
 	}
+
 	return existe;
 }
 
@@ -53,32 +55,35 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
 {
 	map <string,string> mapSTL;
 	int counter0=0;
-	//llenar el mapa
-	while(counter0<cantidadElementosLectura){
+	//llenar el mapa, investigando parejas hasta la penúltima palabra con la última
+	while(counter0<cantidadElementosLectura-1){
 		if(mapSTL.find(arrayString[counter0]) == mapSTL.end()){		// la llave aun no existe en el map
 			mapSTL[arrayString[counter0]] = arrayString[counter0+1];
-		} else{														// la llave ya existe en el map
-		}
+		}														// la llave ya existe en el map
 		++counter0;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
 	}
+
+	// el caso de la última palabra es especial. si no existe previamente en el mapa, se asocia con una palabra vacía
+	if(mapSTL.find(arrayString[cantidadElementosLectura-1]) == mapSTL.end())
+	mapSTL[arrayString[cantidadElementosLectura-1]] = string("");
 	
-	vector<double> tiemposEjecuciones (cantidadPruebas);
+	vector<double> tiemposEjecuciones;
 	
 	int counter1 = 0;
-	while(counter1< cantidadPruebas*pasoPrueba){
+	while(counter1< cantidadPruebas*pasoPrueba && counter1 < cantidadElementosLectura){
 		counter0 = 0;
 
 		auto start = chrono::steady_clock::now();
 		while(counter0<pasoPrueba)
-		{	
+		{
 			mapSTL.find(arrayString[counter1]);
-			mapSTL.find(arrayString[counter1] + "NoIsE");
+			mapSTL.find(arrayString[counter1] + string("NoIsE"));
 			++counter0;
 			++counter1;
 		}
 		auto end = chrono::steady_clock::now();
 
-		double tiempoEjecucion = double (chrono::duration_cast<chrono::nanoseconds>(end-start).count());
+		double tiempoEjecucion = double (chrono::duration_cast<chrono::microseconds>(end-start).count());
 		tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
 	}
 
@@ -107,28 +112,33 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 		}
 	}
 	if(!existe(arrayString[cantidadElementosLectura-1], palabras)){ //La ultima palabra se añade junto con una palabra nula
-		palabras.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],0));
+		palabras.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],string("")));
 	}
 	//Hacer la busqueda
-	vector<double> tiempos;
-	for(int i=0; i < cantidadPruebas; ++i)
+	vector<double> tiempos; bool posibleOverflow = false;
+	for(int i=0; i < cantidadPruebas && !posibleOverflow; ++i)
     {
-		auto start = chrono::steady_clock::now();
-		for(int j = 0; j < pasoPrueba; ++j)
+		if((cantidadElementosLectura - (i * pasoPrueba)) >= pasoPrueba)
 		{
-			string palabraBuscada = arrayString[j + i*pasoPrueba];
-			
-			Predicado::setObjetivo(palabraBuscada);
-			find_if(palabras.begin(), palabras.end(), Predicado::existe);
+			auto start = chrono::steady_clock::now();
+			for(int j = 0; j < pasoPrueba; ++j)
+			{	
+				string palabraBuscada = arrayString[j + i*pasoPrueba];
 
-			Predicado::setObjetivo(palabraBuscada + "NoIsE");
-			find_if(palabras.begin(), palabras.end(), Predicado::existe);
+				Predicado::setObjetivo(palabraBuscada);
+				find_if(palabras.begin(), palabras.end(), Predicado::existe);
+
+				Predicado::setObjetivo(palabraBuscada + string("NoIsE"));
+				find_if(palabras.begin(), palabras.end(), Predicado::existe);
+			}
+			auto end = chrono::steady_clock::now();
+
+			double tiempoEjecucion = double(chrono::duration_cast<chrono::microseconds>(end-start).count());
+			tiempos.push_back(tiempoEjecucion);
 		}
-		auto end = chrono::steady_clock::now();
-
-		double tiempoEjecucion = double(chrono::duration_cast<chrono::nanoseconds>(end-start).count());
-		tiempos.push_back(tiempoEjecucion);
+		else posibleOverflow = true;
 	}
+
 	return tiempos;
 }
 
@@ -137,7 +147,7 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
  * @param arrayString arrayString es un array en el cual hay que guardar todas las palabras del archivo nombreArchivo
  * @param nombreArchivo nombreArchivo es un string que contiene el nombre del archivo que hay que leer y del cual queremos guardar el contenido en arrayString
  */
-void lector(string* arrayString, string nombreArchivo)
+void lector(string* arrayString, string nombreArchivo, unsigned int cantidadPalabras)
 {
     string word;
     ifstream file;
@@ -145,12 +155,15 @@ void lector(string* arrayString, string nombreArchivo)
     file.open(nombreArchivo);
     unsigned int counter = 0;
 
-    while(!file.eof())
+    while(!file.eof() && counter < cantidadPalabras)
     {
         file >> word;
         arrayString[counter] = word;
         ++counter;
     }
+
+	file.close();
+	return;
 }
 
 /**
@@ -169,21 +182,32 @@ int main()
 	cin>>cantidadPruebas;
 	string nombreArchivo;  				//"datos.txt"	--> nombre del archivo que hay que leer 
 	cin>>nombreArchivo;
+
+	cout << "PARAMETROS : " << endl
+	<< "cantidadElementosLectura = " << cantidadElementosLectura << endl
+	<< "pasoPrueba = " << pasoPrueba << endl
+	<< "cantidadPruebas = " << cantidadPruebas << endl
+	<< "nombreArchivo = " << nombreArchivo << endl;
 	
     string *arrayString = new string[cantidadElementosLectura];
-    lector(arrayString, nombreArchivo);
+    lector(arrayString, nombreArchivo, cantidadElementosLectura);
 
 	//se guarda todos los tiempos de ejecución en vectores
 	// vector<double> resultadoArbolRojoNegro = move(probarArbol(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 	vector<double> resultadoMapSTL = move(probarMapSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 	vector<double> resultadoVectorSTL = move(probarVectorSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 
-	//guardamos los resultados en una .txt
-	unsigned long long tamanoResultadoMapSTL = resultadoMapSTL.size();
-	for(unsigned long long i = 0; i < tamanoResultadoMapSTL; ++i) std::cout << i << " " << resultadoMapSTL[i] << std::endl;
+	cout << scientific;
+	cout << setprecision(5);
 
+	//guardamos los resultados en una .txt
+	cout << "TIEMPOS DE BUSQUEDA EN MAP STL" << endl;
+	unsigned long long tamanoResultadoMapSTL = resultadoMapSTL.size();
+	for(unsigned long long i = 0; i < tamanoResultadoMapSTL; ++i) cout << i << " " << resultadoMapSTL[i] << endl;
+
+	cout << "TIEMPOS DE BUSQUEDA EN VECTOR STL" << endl;
 	unsigned long long tamanoResultadoVectorSTL = resultadoVectorSTL.size();
-	for(unsigned long long i = 0; i < tamanoResultadoVectorSTL; ++i) std::cout << i << " " << resultadoVectorSTL[i] << std::endl;
+	for(unsigned long long i = 0; i < tamanoResultadoVectorSTL; ++i) cout << i << " " << resultadoVectorSTL[i] << endl;
 	
     delete[] arrayString;
     return 0;

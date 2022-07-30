@@ -1,0 +1,8 @@
+PARAMETROS : 
+cantidadElementosLectura = 9
+pasoPrueba = 10
+cantidadPruebas = 10
+nombreArchivo = datos.txt
+TIEMPOS DE BUSQUEDA EN MAP STL
+0 7.00000e+00
+TIEMPOS DE BUSQUEDA EN VECTOR STL
