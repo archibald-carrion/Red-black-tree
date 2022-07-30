@@ -3,34 +3,36 @@
 /**
  * @brief Constructor por omision
 **/
-Predicado::Predicado(){
-	cantidadPalabras = 0;
-	palabras = 0;
-	objetivo = "";
-	pares = 0;
+void Predicado::init()
+{
+	_cantidadPalabras = 0;
+	_palabras = 0;
+	_objetivo = "";
+	_pares = vector<pair<string,string>>();
 }
+
 /**
  * @brief Constructor con parametros
 **/
-Predicado::Predicado(int cantidadPalabras, string * palabras, vector<pair<string,string>> pares){
-	this->cantidadPalabras = cantidadPalabras;
-	this->palabras = palabras;
-	this->pares = pares;
-	objetivo = "";
+void Predicado::setup(int cantidadPalabras, string * palabras, vector<pair<string,string>> pares)
+{
+	_cantidadPalabras = cantidadPalabras;
+	_palabras = palabras;
+	_pares = pares;
+	_objetivo = "";
 }
 /**
  * @brief Determina si la palabra se encuentra como llave en el vector
  *
  * @return bool que indica si se encuentra
 **/
-bool Predicado::existe(pair<string,string> llaveValor){
-	return objetivo == get<0>(llaveValor);
-}
+bool Predicado::existe(const pair<string,string>& parejaValor)
+{return (_objetivo == parejaValor.first);}
+
 /**
  * @brief Metodo set de objetivo
  *
  *@param string objetivo String que se le asigna a objetivo
 **/
-void setObjetivo(string objetivo){
-	this->objetivo = objetivo;
-}
+void Predicado::setObjetivo(string objetivo)
+{_objetivo = objetivo;}

@@ -8,15 +8,16 @@ using namespace std;
 
 class Predicado{
 	private: 
-		int cantidadPalabras;
-		string * palabras;
-		string objetivo;
-		vector<pair<string,string>> pares;
+		static int _cantidadPalabras;
+		static string* _palabras;
+		static string _objetivo;
+		static vector<pair<string,string>> _pares;
+		
 	public:
-		Predicado();
-		Predicado(int, string *,vector<pair<string,string>>);
-		bool existe(pair<string,string>);
-		void setObjetivo(string);
-}
+		static void init();
+		static void setup(int, string *,vector<pair<string,string>>);
+		static bool existe(const pair<string,string>& llaveValor);
+		static void setObjetivo(string);
+};
 
 #endif
