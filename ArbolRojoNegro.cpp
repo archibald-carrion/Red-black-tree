@@ -317,6 +317,34 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     return 1;
 }
 
+ArbolRojoNegro::Iterador ArbolRojoNegro::find(const int& llave)
+{
+    if(raiz == 0) return Iterador(0); // Caso trivial, la raiz es nula, no se puede buscar
+
+    Connector* actual = raiz;
+    while(actual->tipo == Connector::tipoNodo)
+    {
+        char ladoActual = 0;
+        
+        if(actual->llave < llave) ladoActual = Nodo::ladoDerecho;
+        else ladoActual = Nodo::ladoIzquierdo;
+
+        std::cout << "Llave recibida es " << llave << std::endl;
+        std::cout << "Llave de connector actual es " << actual->llave << std::endl;
+
+        std::cout << "Lado que vamos a tomar es ";
+        if(ladoActual == Nodo::ladoIzquierdo) std::cout << "IZQUIERDO" << std::endl;
+        else std::cout << "DERECHO" << std::endl;
+
+        // El nuevo conector actual va a ser el hijo de este conector actual, según el lado elegido mediante la llave
+        actual = dynamic_cast<Nodo*>(actual)->hijos[ladoActual]; // Este casting es seguro porque este connector es un nodo
+    }
+
+    // Si llegamos a la hoja y la llave coincide, encontramos el valor
+    if(actual->llave == llave) return Iterador(dynamic_cast<Hoja *>(actual)); // Este casting es seguro porque este connector es una hoja
+    else return Iterador(0); // Si no, retornamos un iterador a dirección de hoja nula
+}
+
 //	0-> no rotacion
 // 	1-> RSI
 //	2-> RSD

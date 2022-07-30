@@ -93,6 +93,7 @@ class ArbolRojoNegro
         ~ArbolRojoNegro();   //desctructor 
 
         int insertarDato(const int&,const int&);
+        Iterador find(const int&);
         
         Iterador begin();
         Iterador end();

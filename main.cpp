@@ -120,15 +120,15 @@ void lector(string* arrayString, string nombreArchivo)
 
 //#############################################################################################################################
 
-void probarArbol()
+void probarArbol_s()
 {
     ArbolRojoNegro arbolito;
 
-    int valor = 0;
-    int llave = 0;
-
-    for(unsigned int i = 0; i < 20; ++i)
+    for(unsigned int i = 0; i < 7; ++i)
     {
+        int valor = 0;
+        int llave = 0;
+
         std::cin>>valor;
         std::cin>>llave;
 
@@ -160,12 +160,26 @@ void probarArbol()
 
     for(ArbolRojoNegro::Iterador i = arbolito.begin(); i != arbolito.end(); ++i)
     {std::cout << *i << " " << std::endl;}
+
+    std::cout << "///////////////////////" << std::endl;
+
+    for(unsigned int i = 0; i < 7; ++i)
+    {
+        int llaveBusqueda = 0;
+        std::cin>>llaveBusqueda;
+
+        std::cout << "Llave de busqueda es " << llaveBusqueda << std::endl;
+        ArbolRojoNegro::Iterador match = arbolito.find(llaveBusqueda);
+
+        if(match == arbolito.end()) std::cout << "No se encontro nada" << std::endl;
+        else std::cout << "Se encontro! Su valor asociado es " << *match << std::endl;
+    }
 }
 
 int main()
 {
 
-    probarArbol();
+    probarArbol_s();
 
     /* PROGRAMA PRINCIPAL
 	int cantidadElementosLectura;		// cantidad de palabras que hay que leer del archivo y guardar en la data structures
