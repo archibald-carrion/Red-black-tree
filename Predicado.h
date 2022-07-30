@@ -6,16 +6,14 @@
 
 using namespace std;
 
+/**
+ * @brief Clase que contiene un predicado para ser utilizado en find_if
+**/
 class Predicado{
 	private: 
-		inline static int _cantidadPalabras;
-		inline static string* _palabras;
-		inline static string _objetivo;
-		inline static vector<pair<string,string>> _pares;
-		
+		inline static string _objetivo;	
 	public:
 		static void init();
-		static void setup(int, string *,vector<pair<string,string>>);
 		static bool existe(const pair<string,string>& llaveValor);
 		static void setObjetivo(string);
 };
