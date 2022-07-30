@@ -40,7 +40,7 @@ vector<double> probarMapSTL(string *arrayString, int cantidadElementosLectura, i
 			mapSTL[arrayString[counter0]] = arrayString[counter0+1];
 		} else{														// la llave ya existe en el map
 		}
-		counter0++;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
+		++counter0;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
 	}
 	
 	vector<double> tiemposEjecuciones (cantidadPruebas);
