@@ -19,7 +19,7 @@ class ArbolRojoNegro
                 static const char tipoHoja = 0;
 
                 Connector();
-                virtual ~Connector();
+                virtual ~Connector() = 0;
         };
 
         class Hoja : public Connector
