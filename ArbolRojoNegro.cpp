@@ -14,8 +14,8 @@ void ArbolRojoNegro::Nodo::colorFlipLocal()
 /**
  * @brief Constructor con parametros de Nodo
  *
- * @param hoja_A 
- * @param hoja_B 
+ * @param hoja_A Hijo izquierdo del nodo que se agrega
+ * @param hoja_B Hijo derecho del nodo que se agrega
  * @param color Color del Nodo
 **/
 ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
@@ -419,8 +419,11 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 
     return 1;
 }
+
 /**
- * 
+ * @brief El metodo find permite buscar un elemento en el arbol
+ * @param llave llave es el unico parametro que recibe el metodo find, es la llave que se tiene que buscar en el arbol para saber si ya existe un elemento en arbol con la misma llave
+ * @return El metodo find devuelve un ArbolRojoNegro::Iterador que apunta a la hoja del arbol que contiene el elemento con la llave dada, si no se encontra un elemento con la misma llave entonces signica que no existe en el arbol y por lo tanto devuelve un puntero que apunta a 0 (dirreción hoja nula)
 **/
 ArbolRojoNegro::Iterador ArbolRojoNegro::find(const int& llave)
 {
@@ -455,11 +458,11 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::find(const int& llave)
     else return Iterador(0); // Si no, retornamos un iterador a dirección de hoja nula
 }
 
-//	0-> no rotacion
-// 	1-> RSI
-//	2-> RSD
-//	3-> RDI
-//	4-> RDD
+/**
+ * @brief El metodo verificarRotacion permite verificar si el arbol rojo y negro occupa realizar un rotación apartir de un punto dado, si se occupa una rotación tambien se especifica que tipo de rotacion hay que realizar, se especifica la codificacion de la salida en el return de la funcion
+ * @param bisabuelo bisabuelo es un Connector** que apunta al nodo apartir del cual queremos verificar si hay que realizar un rotación, es el unico parametro del metodo verificarRotacion
+ * @return El metodo verifiucarRotacion devuelve un char, es un metodo con 5 estados posibles, el 0 significa que no hay que realizar una rotacion, el 1 significa que hay que hacer una RSI, el 2 significa que hay que hacer una RSD, el 3 significa que hay que hacer una RDI, el 4 significa que hay que hacer una RDD
+**/
 char ArbolRojoNegro::verificarRotacion(Connector** bisabuelo)
 {
     Nodo* padre = dynamic_cast<Nodo*>(*bisabuelo);
@@ -518,7 +521,10 @@ char ArbolRojoNegro::verificarRotacion(Connector** bisabuelo)
     return char(0);
 }
 
-//se cambia color padre rojo y hijos a negro
+/**
+ * @brief El metodo CF permite realizar la oprecación de color flip apartir del Nodo * padre, el padre se vuelve rojo y los 2 hijos se vuelven negros, el metodo es void, no devuelve nada
+ * @param padre es un Nodo* que apunta al primer elemento al cual hay que cmabiar el color, tiene 2 hijos que tambien se requiere cambiar el color para que sean negros 
+**/
 void ArbolRojoNegro::CF(Nodo* padre)
 {
     if(padre == 0) return; // Código defensivo
@@ -531,7 +537,10 @@ void ArbolRojoNegro::CF(Nodo* padre)
     dynamic_cast<Nodo*>(padre->hijos[1]) -> colorFlipLocal();
 }
 
-// Rotaciones simples
+/**
+ * @brief El metodo RSI permite hacer una rotacion simple izquierda, es un metodo void
+ * @param bis bis es un Connector** que apunta al primer elmento de una serie de 3 elementos a los cuales se requiere hacer una RSI, directo despues de la rotacion se hace un recoloreo
+**/
 void ArbolRojoNegro::RSI(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
@@ -550,6 +559,10 @@ void ArbolRojoNegro::RSI(Connector** bis)
     return;
 }
 
+/**
+ * @brief El metodo RSD permite hacer una rotacion simple derecha, es un metodo void
+ * @param bis bis es un Connector** que apunta al primer elmento de una serie de 3 elementos a los cuales se requiere hacer una RSD, directo despues de la rotacion se hace un recoloreo
+**/
 void ArbolRojoNegro::RSD(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
@@ -568,7 +581,10 @@ void ArbolRojoNegro::RSD(Connector** bis)
     return;
 }
 
-// Rotaciones dobles
+/**
+ * @brief El metodo RDI permite hacer una rotacion doble izquierda, es un metodo void
+ * @param bis bis es un Connector** que apunta al primer elmento de una serie de 3 elementos a los cuales se requiere hacer una RDI, directo despues de la rotacion se hace un recoloreo
+**/
 void ArbolRojoNegro::RDI(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
@@ -588,6 +604,10 @@ void ArbolRojoNegro::RDI(Connector** bis)
     return;
 }
 
+/**
+ * @brief El metodo RDD permite hacer una rotacion doble derecha, es un metodo void
+ * @param bis bis es un Connector** que apunta al primer elmento de una serie de 3 elementos a los cuales se requiere hacer una RDD, directo despues de la rotacion se hace un recoloreo
+**/
 void ArbolRojoNegro::RDD(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
@@ -607,7 +627,10 @@ void ArbolRojoNegro::RDD(Connector** bis)
     return;
 }
 
-// Se cambia color padre para negro, y el color de los hijos para rojo
+/**
+ * @brief El RC permite realizar una operación de recoloreo, pasa el padre a negro y sus 2 hijos a rojo, no importa sus colores previas
+ * @param padre padre  es un Nodo* que apunta al un Nodo que se requiere pasar a negro y al cual se requiere pasar los hijos a rojo, es el unico parametro del metodo
+**/
 void ArbolRojoNegro::RC(Nodo* padre)
 {
     std::cout << "ENTRANDO A RC" << std::endl;

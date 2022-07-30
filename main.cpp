@@ -102,6 +102,9 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 	Predicado::init();
 	vector<pair<string,string>> palabras;
 
+    Predicado::init();
+    //Predicado::setup(pasoPrueba, arrayString, palabras); NO HACE FALTA
+
 	//Llenar el vector palabras
 	for(int i=0; i< cantidadElementosLectura-1; ++i){ //Se revisa si la palabra ya esta en el vector
 		if(!existe(arrayString[i], palabras)){
