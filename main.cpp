@@ -124,7 +124,7 @@ void probarArbol_s()
 {
     ArbolRojoNegro arbolito;
 
-    for(unsigned int i = 0; i < 7; ++i)
+    for(unsigned int i = 0; i < 8; ++i)
     {
         int valor = 0;
         int llave = 0;
@@ -163,7 +163,7 @@ void probarArbol_s()
 
     std::cout << "///////////////////////" << std::endl;
 
-    for(unsigned int i = 0; i < 7; ++i)
+    for(unsigned int i = 0; i < 8; ++i)
     {
         int llaveBusqueda = 0;
         std::cin>>llaveBusqueda;

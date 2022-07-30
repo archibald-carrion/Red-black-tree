@@ -23,8 +23,18 @@ ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
         this->hijos[ladoIzquierdo] = hoja_A;
         this->hijos[ladoDerecho] = hoja_B;
 
-        hoja_A->previous = hoja_B->previous;
-        if(hoja_B->previous != 0) hoja_B->previous->next = hoja_A;
+        // Caso 1 -> La hoja A es foránea a la lista doblemente enlazada
+        if(hoja_A->previous == 0 && hoja_A->next == 0)
+        {
+            hoja_A->previous = hoja_B->previous;
+            if(hoja_B->previous != 0) hoja_B->previous->next = hoja_A;
+        }
+        // Caso 2 -> La hoja A es nativa a la lista doblemente enlazada
+        else 
+        {
+            hoja_B->next = hoja_A->next;
+            if(hoja_A->next != 0) hoja_A->next->previous = hoja_B;
+        }
 
         hoja_A->next = hoja_B;
         hoja_B->previous = hoja_A;
@@ -36,11 +46,21 @@ ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
         this->hijos[ladoDerecho] = hoja_A;
         this->hijos[ladoIzquierdo] = hoja_B;
 
-        hoja_B->previous = hoja_A->previous;
-        if(hoja_A->previous != 0) hoja_A->previous->next = hoja_B;
+        // Caso 1 -> La hoja B es foránea a la lista doblemente enlazada
+        if(hoja_B->previous == 0 && hoja_B->next == 0)
+        {
+            hoja_B->previous = hoja_A->previous;
+            if(hoja_A->previous != 0) hoja_A->previous->next = hoja_B;
+        }
+        // Caso 2 -> La hoja B es nativa a la lista doblemente enlazada
+        else 
+        {
+            hoja_A->next = hoja_B->next;
+            if(hoja_B->next != 0) hoja_B->next->previous = hoja_A;
+        }
         
-        hoja_A->previous = hoja_B;
         hoja_B->next = hoja_A;
+        hoja_A->previous = hoja_B;
     }
 }
 
@@ -324,6 +344,7 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::find(const int& llave)
     Connector* actual = raiz;
     while(actual->tipo == Connector::tipoNodo)
     {
+        Nodo* nodoActual = dynamic_cast<Nodo*>(actual); // Este casting es seguro porque este connector es un nodo
         char ladoActual = 0;
         
         if(actual->llave < llave) ladoActual = Nodo::ladoDerecho;
@@ -331,13 +352,17 @@ ArbolRojoNegro::Iterador ArbolRojoNegro::find(const int& llave)
 
         std::cout << "Llave recibida es " << llave << std::endl;
         std::cout << "Llave de connector actual es " << actual->llave << std::endl;
+        
+        std::cout << "Color de conector actual es ";
+        if(nodoActual->color == Nodo::negro) std::cout << "NEGRO" << std::endl;
+        else std::cout << "ROJO" << std::endl;
 
         std::cout << "Lado que vamos a tomar es ";
         if(ladoActual == Nodo::ladoIzquierdo) std::cout << "IZQUIERDO" << std::endl;
         else std::cout << "DERECHO" << std::endl;
 
         // El nuevo conector actual va a ser el hijo de este conector actual, según el lado elegido mediante la llave
-        actual = dynamic_cast<Nodo*>(actual)->hijos[ladoActual]; // Este casting es seguro porque este connector es un nodo
+        actual = nodoActual->hijos[ladoActual];
     }
 
     // Si llegamos a la hoja y la llave coincide, encontramos el valor
