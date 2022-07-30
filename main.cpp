@@ -162,13 +162,6 @@ void lector(string* arrayString, string nombreArchivo)
     }
 }
 
-//#############################################################################################################################
-
-void probarArbol_s()
-{
-    
-}
-
 /**
  * @brief El metodo main maneja todo el programa y llama los metodos necesarios para el buen desarrollo del programa
  */
