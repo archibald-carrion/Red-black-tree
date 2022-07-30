@@ -581,7 +581,10 @@ void ArbolRojoNegro::RSD(Connector** bis)
     return;
 }
 
-// Rotaciones dobles
+/**
+ * @brief El metodo RDI permite hacer una rotacion doble izquierda, es un metodo void
+ * @param bis bis es un Connector** que apunta al primer elmento de una serie de 3 elementos a los cuales se requiere hacer una RDI, directo despues de la rotacion se hace un recoloreo
+**/
 void ArbolRojoNegro::RDI(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
