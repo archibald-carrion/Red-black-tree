@@ -19,7 +19,7 @@ class ArbolRojoNegro
                 static const char tipoHoja = 0;
 
                 Connector(){}; // Tiene cuerpo porque sub-clases llaman a los constructores en jerarquía, incluso si esta clase es abstracta
-                virtual ~Connector() = 0;
+                virtual ~Connector(){}; // También tiene cuerpo porque sub-clases llaman a los destructores en jerarquía, incluso si esta clase es abstracta
         };
 
         class Hoja : public Connector
@@ -52,28 +52,6 @@ class ArbolRojoNegro
                 void colorFlipLocal();
         };
 
-        class Iterador
-        {
-            private:
-                Hoja* actual;
-
-            public:
-                Iterador(Hoja*);
-                Iterador(const Iterador&);
-                ~Iterador();
-
-                Iterador& operator=(const Iterador&);
-                bool operator==(const Iterador&);
-
-                Iterador& operator++();
-                Iterador operator++(int);
-
-                Iterador& operator--();
-                Iterador operator--(int);
-
-                const int& operator*();
-        };
-
         Connector* raiz; //pila -> mejor O
         Hoja* hojaMinima;
 
@@ -87,6 +65,29 @@ class ArbolRojoNegro
         char verificarRotacion(Connector**);
 
     public:
+
+        class Iterador
+        {
+            private:
+                Hoja* actual;
+
+            public:
+                Iterador(Hoja*);
+                Iterador(const Iterador&);
+                ~Iterador(){};
+
+                Iterador& operator=(const Iterador&);
+                bool operator==(const Iterador&);
+                bool operator!=(const Iterador&);
+
+                Iterador& operator++();
+                Iterador operator++(int);
+
+                Iterador& operator--();
+                Iterador operator--(int);
+
+                const int& operator*();
+        };
 
         ArbolRojoNegro();    //constructor
         ~ArbolRojoNegro();   //desctructor 

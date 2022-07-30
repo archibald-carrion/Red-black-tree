@@ -120,8 +120,47 @@ void lector(string* arrayString, string nombreArchivo)
 
 //#############################################################################################################################
 
+void probarArbol()
+{
+    ArbolRojoNegro arbolito;
+
+    int valor = 0;
+    int llave = 0;
+
+    for(unsigned int i = 0; i < 8; ++i)
+    {
+        std::cin>>valor;
+        std::cin>>llave;
+        arbolito.insertarDato(valor, llave);
+    }
+
+    std::cout << "\n";
+    
+    for(ArbolRojoNegro::Iterador i = arbolito.begin(); i != arbolito.end(); ++i)
+    {
+        std::cout << "==============" << std::endl;
+
+        std::cout << "*I es " << *i << std::endl;
+
+        ArbolRojoNegro::Iterador i_sig = ArbolRojoNegro::Iterador(i); ++i_sig;
+        ArbolRojoNegro::Iterador i_previo = ArbolRojoNegro::Iterador(i); --i_previo;
+
+        std::cout << "I++ es ";
+        if(i_sig == arbolito.end()) std::cout << "NULO" << std::endl;
+        else std::cout << *i_sig << std::endl;
+
+        std::cout << "I-- es ";
+        if(i_previo == arbolito.end()) std::cout << "NULO" << std::endl;
+        else std::cout << *i_previo << std::endl;
+    }
+}
+
 int main()
 {
+
+    probarArbol();
+
+    /* PROGRAMA PRINCIPAL
 	int cantidadElementosLectura;		// cantidad de palabras que hay que leer del archivo y guardar en la data structures
 	cin>>cantidadElementosLectura;		
 	int pasoPrueba;						// cantidad de palabras que hay que probar por pruebas
@@ -142,6 +181,8 @@ int main()
 	//guardamos los resultados en una .txt
 	
     delete[] arrayString;
+    */
+
     return 0;
 }
 

@@ -10,20 +10,30 @@ void ArbolRojoNegro::Nodo::colorFlipLocal()
     return;
 }
 
-ArbolRojoNegro::Nodo::Nodo(Hoja* hijaIzquierda, Hoja* hijaDerecha, char color)
+ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
 {
     this->tipo = tipoNodo;
     this->color = color;
 
-    this->hijos[ladoIzquierdo] = hijaIzquierda;
-    this->hijos[ladoDerecho] = hijaDerecha;
+    if(hoja_A == 0 || hoja_B == 0) this->llave = int();
+    else if(hoja_A->llave < hoja_B->llave) 
+    {
+        this->hijos[ladoIzquierdo] = hoja_A;
+        this->hijos[ladoDerecho] = hoja_B;
 
-    if(hijaIzquierda == 0 || hijaDerecha == 0) this->llave = int();
-    else if(hijaIzquierda->llave < hijaDerecha->llave) this->llave = hijaIzquierda->llave;
-    else this->llave = hijaDerecha->llave;
+        this->llave = hoja_A->llave;
+        hoja_A->next = hoja_B;
+        hoja_B->previous = hoja_A;
+    }
+    else 
+    {
+        this->hijos[ladoDerecho] = hoja_A;
+        this->hijos[ladoIzquierdo] = hoja_B;
 
-    hijaIzquierda->next = hijaDerecha;
-    hijaDerecha->previous = hijaIzquierda;
+        this->llave = hoja_B->llave;
+        hoja_A->previous = hoja_B;
+        hoja_B->next = hoja_A;
+    }
 }
 
 // HOJA
@@ -55,6 +65,9 @@ ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator=(const Iterador& it
 
 bool ArbolRojoNegro::Iterador::operator==(const Iterador& iteradorComparable)
 {return (this->actual == iteradorComparable.actual);}
+
+bool ArbolRojoNegro::Iterador::operator!=(const Iterador& iteradorComparable)
+{return (this->actual != iteradorComparable.actual);}
 
 ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator++()
 {
@@ -135,16 +148,10 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
         Nodo* nuevoNodo;
 
         // En ambos casos el nuevo nodo raíz será negro de una vez
-        if(llave < raiz->llave) 
-        {
-            nuevoNodo = new Nodo(nuevaHoja, raizComoHoja, Connector::negro);
-            hojaMinima = nuevaHoja;
-        }
-        else 
-        {
-            nuevoNodo = new Nodo(raizComoHoja, nuevaHoja, Connector::negro);
-            hojaMinima = raizComoHoja; 
-        }
+        nuevoNodo = new Nodo(nuevaHoja, raizComoHoja, Connector::negro);
+
+        if(llave < raiz->llave) hojaMinima = nuevaHoja;
+        else hojaMinima = raizComoHoja;
 
         raiz = (Connector*) nuevoNodo;
         return 1;
@@ -172,10 +179,7 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 
         Hoja* nuevaHoja = new Hoja(valor, llave);
         Hoja* hojaHijaActual = dynamic_cast<Hoja*>(connectorHijoActual);
-        Nodo* nuevoNodo;
-
-        if(llave < nodoActual->llave) nuevoNodo = new Nodo(nuevaHoja, hojaHijaActual, Connector::rojo);
-        else nuevoNodo = new Nodo(hojaHijaActual, nuevaHoja, Connector::rojo);
+        Nodo* nuevoNodo = new Nodo(hojaHijaActual, nuevaHoja, Connector::rojo);
 
         nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
         if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;
@@ -240,12 +244,9 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
     // Tenemos que el connector siguiente es una hoja, y podemos realizar una inserción
     if(llave == connectorHijoActual->llave) return 0; // Llave ya preexistente
 
-    Nodo* nuevoNodo;
     Hoja* hojaHijaActual = dynamic_cast<Hoja*>(connectorHijoActual);
     Hoja* nuevaHoja = new Hoja(valor, llave);
-
-    if(llave < connectorHijoActual->llave) nuevoNodo = new Nodo(nuevaHoja, hojaHijaActual, Connector::rojo);
-    else nuevoNodo = new Nodo(hojaHijaActual, nuevaHoja, Connector::rojo);
+    Nodo* nuevoNodo = new Nodo(nuevaHoja, hojaHijaActual, Connector::rojo);
 
     nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
     if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;

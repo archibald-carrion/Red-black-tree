@@ -8,10 +8,10 @@ using namespace std;
 
 class Predicado{
 	private: 
-		static int _cantidadPalabras;
-		static string* _palabras;
-		static string _objetivo;
-		static vector<pair<string,string>> _pares;
+		inline static int _cantidadPalabras;
+		inline static string* _palabras;
+		inline static string _objetivo;
+		inline static vector<pair<string,string>> _pares;
 		
 	public:
 		static void init();
