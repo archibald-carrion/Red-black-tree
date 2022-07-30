@@ -604,6 +604,10 @@ void ArbolRojoNegro::RDI(Connector** bis)
     return;
 }
 
+/**
+ * @brief El metodo RDD permite hacer una rotacion doble derecha, es un metodo void
+ * @param bis bis es un Connector** que apunta al primer elmento de una serie de 3 elementos a los cuales se requiere hacer una RDD, directo despues de la rotacion se hace un recoloreo
+**/
 void ArbolRojoNegro::RDD(Connector** bis)
 {
     if(bis == 0) return; // Código defensivo
