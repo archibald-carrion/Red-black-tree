@@ -1,7 +1,9 @@
 #include "ArbolRojoNegro.h"
 #include <iostream>
 // NODO
-
+/**
+ * @brief Le cambia el color al Nodo
+**/
 void ArbolRojoNegro::Nodo::colorFlipLocal()
 {
     if(this->color == (char)0) this->color = (char)1;
@@ -9,7 +11,13 @@ void ArbolRojoNegro::Nodo::colorFlipLocal()
 
     return;
 }
-
+/**
+ * @brief Constructor con parametros de Nodo
+ *
+ * @param hoja_A 
+ * @param hoja_B 
+ * @param color Color del Nodo
+**/
 ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
 {
     this->tipo = tipoNodo;
@@ -65,7 +73,14 @@ ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
 }
 
 // HOJA
-
+/**
+ * @brief Constructor con parametros de Hoja
+ *
+ * @param valorTemporal Valor que se le asigna la hoja
+ * @param llaveTemporal LLave que se le asigna a la hoja
+ * @param next La siguiente Hoja en el arbol
+ * @param previous La hoja anterior en el arbol
+**/
 ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal, Hoja* next, Hoja* previous)
 {
     this->valor = valorTemporal;
@@ -78,74 +93,142 @@ ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal, H
 }
 
 // ITERADOR
-
+/**
+ * @brief Constructor con parametros de Iterador
+ *
+ * @param hojaIterable Hoja que se asigna como actual al iterador
+**/
 ArbolRojoNegro::Iterador::Iterador(Hoja* hojaIterable)
 {this->actual = hojaIterable;}
-
+/**
+ * @brief Constructor por copia de Iterador
+ * 
+ * @param iteradorCopiable Iterador que se copia
+**/
 ArbolRojoNegro::Iterador::Iterador(const Iterador& iteradorCopiable)
 {this->actual = iteradorCopiable.actual;}
-
+/**
+ * @brief Operador de asignacion para Iterador
+ *
+ * @param iteradorCopiable Iterador que se asigna 
+ * @return Iterador& con el Iterador modificado
+**/
 ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator=(const Iterador& iteradorCopiable)
 {
     this->actual = iteradorCopiable.actual;
     return *this;
 }
-
+/**
+ * @brief Operador "igual que" para Iterador
+ *
+ * @param iteradorComparable Iterador con el que se compara para determinar la igualdad
+ * @return bool que indica si son iguales
+**/
 bool ArbolRojoNegro::Iterador::operator==(const Iterador& iteradorComparable)
 {return (this->actual == iteradorComparable.actual);}
-
+/**
+ * @brief Operador "diferente que" para Iterador
+ *
+ * @param iteradorComparable Iterador con el que se compara para determinar la desigualdad
+ * @return bool que indica si son diferentes
+**/
 bool ArbolRojoNegro::Iterador::operator!=(const Iterador& iteradorComparable)
 {return (this->actual != iteradorComparable.actual);}
-
+/**
+ * @brief Operador de preincremento 
+ * 
+ * Modifica al Iterador para que apunte a la siguiente hoja y lo retorna
+ * @return Iterador& que apunta a la siguiente hoja
+**/
 ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator++()
 {
     actual = actual->next;
     return *this;
 }
-
+/**
+ * @brief Operador de postincremento 
+ * 
+ * Hace una copia del Iterador y modifica al Iterador para que apunte a la siguiente hoja
+ * Luego retorna la copia
+ * @param x Parametro cuya unica funcion es diferenciar el metodo del preincremento
+ * @return Iterador& con la copia del Iterador no modificado
+**/
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++(int x)
 {
     Iterador copia(*this);
     actual = actual->next;
     return copia;
 }
-
+/**
+ * @brief Operador de predecremento
+ * 
+ * Modifica al Iterador para que apunte a la hoja anterior y lo retorna
+ * @return Iterador& que apunta a la hoja anterior
+**/
 ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator--()
 {
     actual = actual->previous;
     return *this;
 }
-
+/**
+ * @brief Operador de postdecremento
+ * 
+ * Hace una copia del Iterador y modifica al Iterador para que apunte a la hoja anterior
+ * Luego retorna la copia
+ * @param x Parametro cuya unica funcion es diferenciar el metodo del predecremento
+ * @return Iterador& con la copia del Iterador no modificado
+**/
 ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--(int x)
 {
     Iterador copia(*this);
     actual = actual->previous;
     return copia;
 }
-
+/**
+ * @brief Operador de desreferencia
+ *
+ * @return const int& con el valor de la hoja a la que apunta el Iterador
+**/
 const int& ArbolRojoNegro::Iterador::operator*()
 {return this->actual->valor;}
 
 // ARBOL ROJO-NEGRO
-
+/**
+ * @brief Retorna un Iterador que apunta a la primera hoja (la de menor valor)
+ *
+ * @return Iterador que apunta a la primera hoja
+**/
 ArbolRojoNegro::Iterador ArbolRojoNegro::begin()
 {return Iterador(hojaMinima);}
-
+/**
+ * @brief Retorna un Iterador que apunta al final (nulo)
+ * 
+ * @return Iterador nulo
+**/
 ArbolRojoNegro::Iterador ArbolRojoNegro::end()
 {return Iterador(0);}
-
+/**
+ * @brief Constructor por omision de ArbolRojoNegro
+**/
 ArbolRojoNegro::ArbolRojoNegro()
 {
     raiz = 0;
     hojaMinima = 0;
 }
-
+/**
+ * @brief Destructor de ArbolRojoNegro
+**/
 ArbolRojoNegro::~ArbolRojoNegro()
 {
     // Desctructor recursivo, en cadena
     if(raiz) delete raiz;
 }
-
+/**
+ * @brief Inserta un dato en el arbol
+ *
+ * @param valor Valor del dato que se inserta
+ * @param llave LLave del dato que se inserta
+**/
 int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 {
     // Recorrer el arbol, hacer el color flip si se occupa, sino, no
@@ -336,7 +419,9 @@ int ArbolRojoNegro::insertarDato(const int& valor, const int& llave)
 
     return 1;
 }
-
+/**
+ * 
+**/
 ArbolRojoNegro::Iterador ArbolRojoNegro::find(const int& llave)
 {
     if(raiz == 0) return Iterador(0); // Caso trivial, la raiz es nula, no se puede buscar
