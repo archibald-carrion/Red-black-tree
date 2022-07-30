@@ -94,3 +94,31 @@ vector<double> probarMapSTL(string *arrayString, int cantidadElementosLectura, i
 	return tiemposEjecuciones;
 }
 
+//#############################################################################################################################
+
+vector<double> probarVectorSTL(string * arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+{
+	Predicado predicado;
+	vector<pair<string,string>> palabras;
+	//Llenar el vector palabras
+	for(int i=0; i< cantidadElementosLectura-2; ++i){ //Se revisa si la palabra ya esta en el vector
+		if(!existe(arrayString, palabras)){
+			palabras.push_back(pair<string,string>(arrayString[i]),arrayString[i+1]);
+		}
+	}
+	if(!existe(arrayString[cantidadElementosLectura-1], palabras)){ //La ultima palabra se añade junto con una palabra nula
+		palabras.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],0));
+	}
+	//Hacer la busqueda
+	vector<double> tiempos;
+	for(int i=0; i < cantidadPruebas; ++i){
+		auto start = chrono::steady_clock::now();
+		//codigo
+		auto it = find_if(palabras.begin(), palabras.end(), predicado.existe);
+		auto end = chrono::steady_clock::now();
+		double tiempoEjecucion = double(chrono::duration_cast<chrono::nanoseconds>(end-start).count());
+		tiempos.push_back(tiempoEjecucion);
+	}
+	return tiempos;
+}
+
