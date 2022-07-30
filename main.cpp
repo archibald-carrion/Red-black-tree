@@ -166,58 +166,7 @@ void lector(string* arrayString, string nombreArchivo)
 
 void probarArbol_s()
 {
-    ArbolRojoNegro arbolito;
-
-    for(unsigned int i = 0; i < 8; ++i)
-    {
-        int valor = 0;
-        int llave = 0;
-
-        std::cin>>valor;
-        std::cin>>llave;
-
-        std::cout << "Dato a insertar es " << valor << " , llave es " << llave << std::endl;
-        arbolito.insertarDato(valor, llave);
-    }
-
-    std::cout << "\n";
     
-    for(ArbolRojoNegro::Iterador i = arbolito.begin(); i != arbolito.end(); ++i)
-    {
-        std::cout << "==============" << std::endl;
-
-        std::cout << "*I es " << *i << std::endl;
-
-        ArbolRojoNegro::Iterador i_sig = ArbolRojoNegro::Iterador(i); ++i_sig;
-        ArbolRojoNegro::Iterador i_previo = ArbolRojoNegro::Iterador(i); --i_previo;
-
-        std::cout << "I++ es ";
-        if(i_sig == arbolito.end()) std::cout << "NULO" << std::endl;
-        else std::cout << *i_sig << std::endl;
-
-        std::cout << "I-- es ";
-        if(i_previo == arbolito.end()) std::cout << "NULO" << std::endl;
-        else std::cout << *i_previo << std::endl;
-    }
-
-    std::cout << "///////////////////////" << std::endl;
-
-    for(ArbolRojoNegro::Iterador i = arbolito.begin(); i != arbolito.end(); ++i)
-    {std::cout << *i << " " << std::endl;}
-
-    std::cout << "///////////////////////" << std::endl;
-
-    for(unsigned int i = 0; i < 8; ++i)
-    {
-        int llaveBusqueda = 0;
-        std::cin>>llaveBusqueda;
-
-        std::cout << "Llave de busqueda es " << llaveBusqueda << std::endl;
-        ArbolRojoNegro::Iterador match = arbolito.find(llaveBusqueda);
-
-        if(match == arbolito.end()) std::cout << "No se encontro nada" << std::endl;
-        else std::cout << "Se encontro! Su valor asociado es " << *match << std::endl;
-    }
 }
 
 /**
