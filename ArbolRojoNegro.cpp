@@ -627,7 +627,10 @@ void ArbolRojoNegro::RDD(Connector** bis)
     return;
 }
 
-// Se cambia color padre para negro, y el color de los hijos para rojo
+/**
+ * @brief El RC permite realizar una operación de recoloreo, pasa el padre a negro y sus 2 hijos a rojo, no importa sus colores previas
+ * @param padre padre  es un Nodo* que apunta al un Nodo que se requiere pasar a negro y al cual se requiere pasar los hijos a rojo, es el unico parametro del metodo
+**/
 void ArbolRojoNegro::RC(Nodo* padre)
 {
     std::cout << "ENTRANDO A RC" << std::endl;
