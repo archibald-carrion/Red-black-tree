@@ -12,6 +12,12 @@
 
 using namespace std;
 
+/**
+ * @brief El metodo existe permite verificar si un pair ya existe en el vector con la llave dada
+ * @param arrayString El string que hay que buscar
+ * @param palabras Es un vector<pair<string,string,>> 
+ * @return
+ */
 int existe(string arrayString, vector<pair<string,string>> palabras){
 	int existe = 0;
 	for(auto i = palabras.begin(); i != palabras.end(); ++i){
