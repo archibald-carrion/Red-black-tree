@@ -8,6 +8,7 @@
 #include <string>
 
 #include <chrono>						//para medir tiempo
+#include <utility>						//para usar move semantics y evitar copias largas
 #include "Predicado.h"					//para el prueba vector
 
 using namespace std;
@@ -30,13 +31,13 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 
 //#############################################################################################################################
 
-vector<double> probarArbol(string *arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 }
 
 //#############################################################################################################################
 	
-vector<double> probarMapSTL(string *arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 	map <string,string> mapSTL;
 	int counter0=0;
@@ -74,7 +75,7 @@ vector<double> probarMapSTL(string *arrayString, int cantidadElementosLectura, i
 
 //#############################################################################################################################
 
-vector<double> probarVectorSTL(string * arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 	vector<pair<string,string>> palabras;
 
@@ -192,9 +193,8 @@ void probarArbol_s()
 int main()
 {
 
-    probarArbol_s();
+    // probarArbol_s();
 
-    /* PROGRAMA PRINCIPAL
 	int cantidadElementosLectura;		// cantidad de palabras que hay que leer del archivo y guardar en la data structures
 	cin>>cantidadElementosLectura;		
 	int pasoPrueba;						// cantidad de palabras que hay que probar por pruebas
@@ -208,15 +208,18 @@ int main()
     lector(arrayString, nombreArchivo);
 
 	//se guarda todos los tiempos de ejecución en vectores
-	vector<double> resultadoArbolRojoNegro = probarArbol(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas);
-	vector<double> resultadoMapSTL = probarMapSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas);
-	vector<double> resultadoVectorSTL = probarVectorSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas);
+	// vector<double> resultadoArbolRojoNegro = move(probarArbol(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
+	vector<double> resultadoMapSTL = move(probarMapSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
+	vector<double> resultadoVectorSTL = move(probarVectorSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 
 	//guardamos los resultados en una .txt
+	unsigned long long tamanoResultadoMapSTL = resultadoMapSTL.size();
+	for(unsigned long long i = 0; i < tamanoResultadoMapSTL; ++i) std::cout << i << " " << resultadoMapSTL[i] << std::endl;
+
+	unsigned long long tamanoResultadoVectorSTL = resultadoVectorSTL.size();
+	for(unsigned long long i = 0; i < tamanoResultadoVectorSTL; ++i) std::cout << i << " " << resultadoVectorSTL[i] << std::endl;
 	
     delete[] arrayString;
-    */
-
     return 0;
 }
 
