@@ -122,3 +122,12 @@ vector<double> probarVectorSTL(string * arrayString, int cantidadElementosLectur
 	return tiempos;
 }
 
+int existe(string * arrayString, vector<string,string> palabras){
+	int existe = 0;
+	for(auto i = palabras.begin(); i != palabras.end(); ++i){
+		if(arrayString[i] == get<0>(palabras[i])){
+			existe = 1; //Sí esta en el vector
+		}
+	}
+	return existe;
+}
