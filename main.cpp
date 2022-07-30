@@ -67,24 +67,23 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
 	if(mapSTL.find(arrayString[cantidadElementosLectura-1]) == mapSTL.end())
 	mapSTL[arrayString[cantidadElementosLectura-1]] = string("");
 	
-	vector<double> tiemposEjecuciones;
-	
-	int counter1 = 0;
-	while(counter1< cantidadPruebas*pasoPrueba && counter1 < cantidadElementosLectura){
-		counter0 = 0;
-
-		auto start = chrono::steady_clock::now();
-		while(counter0<pasoPrueba)
+	vector<double> tiemposEjecuciones; bool overflowPosible = false;
+	for(unsigned int counter1 = 0; counter1 < cantidadPruebas && !overflowPosible; ++counter1)
+	{
+		if(pasoPrueba > (cantidadElementosLectura - (counter1 * pasoPrueba)))  overflowPosible = true;
+		else
 		{
-			mapSTL.find(arrayString[counter1]);
-			mapSTL.find(arrayString[counter1] + string("NoIsE"));
-			++counter0;
-			++counter1;
-		}
-		auto end = chrono::steady_clock::now();
+			auto start = chrono::steady_clock::now();
+			for(int counter2 = 0; counter2 < pasoPrueba; ++counter2)
+			{
+				mapSTL.find(arrayString[counter1*pasoPrueba + counter2]);
+				mapSTL.find(arrayString[counter1*pasoPrueba + counter2] + string("NoIsE"));
+			}
+			auto end = chrono::steady_clock::now();
 
-		double tiempoEjecucion = double (chrono::duration_cast<chrono::microseconds>(end-start).count());
-		tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
+			double tiempoEjecucion = double (chrono::duration_cast<chrono::microseconds>(end-start).count());
+			tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
+		}
 	}
 
 	return tiemposEjecuciones;
@@ -100,10 +99,8 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
  */
 vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
+	Predicado::init();
 	vector<pair<string,string>> palabras;
-
-    Predicado::init();
-    Predicado::setup(pasoPrueba, arrayString, palabras);
 
 	//Llenar el vector palabras
 	for(int i=0; i< cantidadElementosLectura-1; ++i){ //Se revisa si la palabra ya esta en el vector
@@ -114,11 +111,13 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 	if(!existe(arrayString[cantidadElementosLectura-1], palabras)){ //La ultima palabra se añade junto con una palabra nula
 		palabras.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],string("")));
 	}
+
 	//Hacer la busqueda
 	vector<double> tiempos; bool posibleOverflow = false;
-	for(int i=0; i < cantidadPruebas && !posibleOverflow; ++i)
+	for(unsigned int i=0; i < cantidadPruebas && !posibleOverflow; ++i)
     {
-		if((cantidadElementosLectura - (i * pasoPrueba)) >= pasoPrueba)
+		if(pasoPrueba > (cantidadElementosLectura - (i * pasoPrueba)))  posibleOverflow = true;
+		else
 		{
 			auto start = chrono::steady_clock::now();
 			for(int j = 0; j < pasoPrueba; ++j)
@@ -136,7 +135,6 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 			double tiempoEjecucion = double(chrono::duration_cast<chrono::microseconds>(end-start).count());
 			tiempos.push_back(tiempoEjecucion);
 		}
-		else posibleOverflow = true;
 	}
 
 	return tiempos;

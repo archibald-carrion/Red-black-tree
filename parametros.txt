@@ -1,1 +1,1 @@
-9 10 10 datos.txt
+100000 10 100 datos.txt
