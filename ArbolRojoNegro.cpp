@@ -81,13 +81,13 @@ ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
  * @param next La siguiente Hoja en el arbol
  * @param previous La hoja anterior en el arbol
 **/
-ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal, Hoja* next, Hoja* previous)
+ArbolRojoNegro::Hoja::Hoja(const int& valorTemporal, const int& llaveTemporal)
 {
     this->valor = valorTemporal;
     this->llave = llaveTemporal;
 
-    this->next = next;
-    this->previous = previous;
+    this->next = 0;
+    this->previous = 0;
 
     this->tipo = tipoHoja;
 }

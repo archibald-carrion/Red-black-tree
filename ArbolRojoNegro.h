@@ -30,7 +30,7 @@ class ArbolRojoNegro
                 Hoja* next;
                 Hoja* previous;
 
-                Hoja(const int&, const int&, Hoja* = 0, Hoja* = 0);
+                Hoja(const int&, const int&);
                 ~Hoja(){};
         };
 
