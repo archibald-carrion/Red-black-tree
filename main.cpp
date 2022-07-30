@@ -41,6 +41,41 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
  */
 vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
+	//ArbolRojoNegro * arbol = new ArbolRojoNegro();
+	ArbolRojoNegro<string,string> arbol;
+	int counter0=0;
+	//llenar el mapa, investigando parejas hasta la penúltima palabra con la última
+	while(counter0<cantidadElementosLectura-1){
+		if(arbol.find(arrayString[counter0]) == arbol.end()){		// la llave aun no existe en el map
+			arbol.insertarDato(arrayString[counter0], arrayString[counter0+1]);
+		}														// la llave ya existe en el map
+		++counter0;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
+	}
+
+	// el caso de la última palabra es especial. si no existe previamente en el mapa, se asocia con una palabra vacía
+	if(arbol.find(arrayString[cantidadElementosLectura-1]) == arbol.end())
+	arbol.insertarDato(arrayString[cantidadElementosLectura-1], string(""));
+	
+	vector<double> tiemposEjecuciones; bool overflowPosible = false;
+	for(unsigned int counter1 = 0; counter1 < cantidadPruebas && !overflowPosible; ++counter1)
+	{
+		if(pasoPrueba > (cantidadElementosLectura - (counter1 * pasoPrueba)))  overflowPosible = true;
+		else
+		{
+			auto start = chrono::steady_clock::now();
+			for(int counter2 = 0; counter2 < pasoPrueba; ++counter2)
+			{
+				arbol.find(arrayString[counter1*pasoPrueba + counter2]);
+				arbol.find(arrayString[counter1*pasoPrueba + counter2] + string("NoIsE"));
+			}
+			auto end = chrono::steady_clock::now();
+
+			double tiempoEjecucion = double (chrono::duration_cast<chrono::microseconds>(end-start).count());
+			tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
+		}
+	}
+
+	return tiemposEjecuciones;
 }
 
 /**
