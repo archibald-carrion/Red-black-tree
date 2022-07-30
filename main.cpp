@@ -29,9 +29,6 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 	return existe;
 }
 
-//#############################################################################################################################
-
-
 /**
  * @brief El metodo probarArbol permite realizar las pruebas con el arbol rojo y negro
  * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
@@ -43,8 +40,6 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 }
-
-//#############################################################################################################################
 
 /**
  * @brief El metodo robarMapSTL permite realizar las pruebas con el map de la STL
@@ -89,8 +84,6 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
 
 	return tiemposEjecuciones;
 }
-
-//#############################################################################################################################
 
 /**
  * @brief El metodo probarVectorSTL permite realizar las pruebas con el vector de la STL, esun vector de pair<key, value>
@@ -138,8 +131,6 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 	}
 	return tiempos;
 }
-
-//#############################################################################################################################
 
 /**
  * @brief El metodo lector permite leer el archivo de texto y guarda el contenido en arrayString
@@ -197,7 +188,3 @@ int main()
     delete[] arrayString;
     return 0;
 }
-
-
-//#############################################################################################################################
-
