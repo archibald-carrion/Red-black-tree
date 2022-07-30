@@ -6,6 +6,8 @@
 
 using namespace std;
 
+void lector(string* arrayString, string nombreArchivo);
+
 int main()
 {
     string *arrayString = new string[39151187];

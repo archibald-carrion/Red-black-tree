@@ -62,13 +62,14 @@ class ArbolRojoNegro
                 Iterador(const Iterador&);
                 ~Iterador();
 
-                Iterador operator=(const Iterador&);
+                Iterador& operator=(const Iterador&);
                 bool operator==(const Iterador&);
 
-                Iterador operator++();
+                Iterador& operator++();
                 Iterador operator++(int);
 
-                Iterador operator--();
+                Iterador& operator--();
+                Iterador operator--(int);
 
                 const int& operator*();
         };

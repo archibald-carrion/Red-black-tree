@@ -47,28 +47,51 @@ ArbolRojoNegro::Iterador::Iterador(Hoja* hojaIterable)
 ArbolRojoNegro::Iterador::Iterador(const Iterador& iteradorCopiable)
 {this->actual = iteradorCopiable.actual;}
 
-ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator=(const Iterador& iteradorCopiable)
-{this->actual = iteradorCopiable.actual;}
+ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator=(const Iterador& iteradorCopiable)
+{
+    this->actual = iteradorCopiable.actual;
+    return *this;
+}
 
 bool ArbolRojoNegro::Iterador::operator==(const Iterador& iteradorComparable)
 {return (this->actual == iteradorComparable.actual);}
 
-ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++()
-{actual = actual->next;}
+ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator++()
+{
+    actual = actual->next;
+    return *this;
+}
 
-ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--()
-{actual = actual->previous;}
+ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator++(int x)
+{
+    Iterador copia(*this);
+    actual = actual->next;
+    return copia;
+}
+
+ArbolRojoNegro::Iterador& ArbolRojoNegro::Iterador::operator--()
+{
+    actual = actual->previous;
+    return *this;
+}
+
+ArbolRojoNegro::Iterador ArbolRojoNegro::Iterador::operator--(int x)
+{
+    Iterador copia(*this);
+    actual = actual->previous;
+    return copia;
+}
 
 const int& ArbolRojoNegro::Iterador::operator*()
 {return this->actual->valor;}
+
+// ARBOL ROJO-NEGRO
 
 ArbolRojoNegro::Iterador ArbolRojoNegro::begin()
 {return Iterador(hojaMinima);}
 
 ArbolRojoNegro::Iterador ArbolRojoNegro::end()
 {return Iterador(0);}
-
-// ARBOL ROJO-NEGRO
 
 ArbolRojoNegro::ArbolRojoNegro()
 {
