@@ -14,8 +14,8 @@ void ArbolRojoNegro::Nodo::colorFlipLocal()
 /**
  * @brief Constructor con parametros de Nodo
  *
- * @param hoja_A 
- * @param hoja_B 
+ * @param hoja_A Hijo izquierdo del nodo que se agrega
+ * @param hoja_B Hijo derecho del nodo que se agrega
  * @param color Color del Nodo
 **/
 ArbolRojoNegro::Nodo::Nodo(Hoja* hoja_A, Hoja* hoja_B, char color)
