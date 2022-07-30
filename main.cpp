@@ -56,6 +56,8 @@ vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, in
 	if(arbol.find(arrayString[cantidadElementosLectura-1]) == arbol.end())
 	arbol.insertarDato(arrayString[cantidadElementosLectura-1], string(""));
 	
+	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
+
 	vector<double> tiemposEjecuciones; bool overflowPosible = false;
 	for(unsigned int counter1 = 0; counter1 < cantidadPruebas && !overflowPosible; ++counter1)
 	{
@@ -73,7 +75,11 @@ vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, in
 			double tiempoEjecucion = double (chrono::duration_cast<chrono::microseconds>(end-start).count());
 			tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
 		}
+
+		std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
 	}
+
+	std::cout << "]" << std::endl; // Mostrar progreso (lado derecho de barra de progreso)
 
 	return tiemposEjecuciones;
 }
@@ -102,6 +108,8 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
 	if(mapSTL.find(arrayString[cantidadElementosLectura-1]) == mapSTL.end())
 	mapSTL[arrayString[cantidadElementosLectura-1]] = string("");
 	
+	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
+
 	vector<double> tiemposEjecuciones; bool overflowPosible = false;
 	for(unsigned int counter1 = 0; counter1 < cantidadPruebas && !overflowPosible; ++counter1)
 	{
@@ -119,7 +127,11 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
 			double tiempoEjecucion = double (chrono::duration_cast<chrono::microseconds>(end-start).count());
 			tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
 		}
+
+		std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
 	}
+
+	std::cout << "]" << std::endl; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	return tiemposEjecuciones;
 }
@@ -149,6 +161,8 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 		palabras.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],string("")));
 	}
 
+	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
+
 	//Hacer la busqueda
 	vector<double> tiempos; bool posibleOverflow = false;
 	for(unsigned int i=0; i < cantidadPruebas && !posibleOverflow; ++i)
@@ -172,7 +186,11 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 			double tiempoEjecucion = double(chrono::duration_cast<chrono::microseconds>(end-start).count());
 			tiempos.push_back(tiempoEjecucion);
 		}
+
+		std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
 	}
+
+	std::cout << "]" << std::endl; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	return tiempos;
 }
@@ -206,15 +224,6 @@ void lector(string* arrayString, string nombreArchivo, unsigned int cantidadPala
  */
 int main()
 {
-
-	ArbolRojoNegro<string, int> a;
-	a.insertarDato(10, "hola");
-	a.insertarDato(12, "bye!");
-
-	std::cout << *a.begin() << std::endl;
-
-    // probarArbol_s();
-
 	int cantidadElementosLectura;		// cantidad de palabras que hay que leer del archivo y guardar en la data structures
 	cin>>cantidadElementosLectura;		
 	int pasoPrueba;						// cantidad de palabras que hay que probar por pruebas
@@ -234,7 +243,7 @@ int main()
     lector(arrayString, nombreArchivo, cantidadElementosLectura);
 
 	//se guarda todos los tiempos de ejecución en vectores
-	// vector<double> resultadoArbolRojoNegro = move(probarArbol(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
+	vector<double> resultadoArbolRojoNegro = move(probarArbol(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 	vector<double> resultadoMapSTL = move(probarMapSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 	vector<double> resultadoVectorSTL = move(probarVectorSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
 
@@ -249,6 +258,10 @@ int main()
 	cout << "TIEMPOS DE BUSQUEDA EN VECTOR STL" << endl;
 	unsigned long long tamanoResultadoVectorSTL = resultadoVectorSTL.size();
 	for(unsigned long long i = 0; i < tamanoResultadoVectorSTL; ++i) cout << i << " " << resultadoVectorSTL[i] << endl;
+
+	cout << "TIEMPOS DE BUSQUEDA EN ARBOL ROJINEGRO NUESTRO" << endl;
+	unsigned long long tamanoResultadoRojinegro = resultadoArbolRojoNegro.size();
+	for(unsigned long long i = 0; i < tamanoResultadoRojinegro; ++i) cout << i << " " << resultadoArbolRojoNegro[i] << endl;
 	
     delete[] arrayString;
     return 0;

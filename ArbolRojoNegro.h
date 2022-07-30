@@ -1,7 +1,7 @@
 #ifndef _ARBOLROJONEGRO_
 #define _ARBOLROJONEGRO_
 
-#include <iostream>
+// #include <iostream> // Para imprimir los mensajes de debugging
 
 template <class K, class V> //K es llave, V es valor
 
@@ -173,7 +173,7 @@ class ArbolRojoNegro
 			nodoBis->hijos[Nodo::ladoDerecho] = nuevoPadre->hijos[Nodo::ladoIzquierdo];
 			nuevoPadre->hijos[0] = (* bis);
 
-			(* bis) = nuevoPadre; std::cout << "RSI EXITOSA" << std::endl;
+			(* bis) = nuevoPadre; // std::cout << "RSI EXITOSA" << std::endl;
 			RC(nuevoPadre);
 
 			return;
@@ -250,7 +250,7 @@ class ArbolRojoNegro
 		**/
 		void RC(Nodo* padre)
 		{
-			std::cout << "ENTRANDO A RC" << std::endl;
+			// std::cout << "ENTRANDO A RC" << std::endl;
 
 			if(padre == 0) return; // Código defensivo
 			padre -> color = Nodo::negro;
@@ -259,7 +259,7 @@ class ArbolRojoNegro
 			dynamic_cast<Nodo*>(padre->hijos[Nodo::ladoIzquierdo]) -> color = Nodo::rojo;
 			dynamic_cast<Nodo*>(padre->hijos[Nodo::ladoDerecho]) -> color = Nodo::rojo;
 
-			std::cout << "RC EXITOSO" << std::endl;
+			// std::cout << "RC EXITOSO" << std::endl;
 		}
 
 		/**
@@ -541,7 +541,7 @@ class ArbolRojoNegro
 			
 			while(connectorHijoActual->tipo == ArbolRojoNegro::Connector::tipoNodo)
 			{
-				std::cout << "Es hora de descender!" << std::endl;
+				// std::cout << "Es hora de descender!" << std::endl;
 				// Antes de descender, verificaremos si ambos hermanos son rojos, si acaso es necesario realizar un color flip en el nodo actual
 				Connector* hermanoTemporal;
 				if(ladoActual == Nodo::ladoIzquierdo) hermanoTemporal = nodoActual->hijos[Nodo::ladoDerecho];
@@ -549,14 +549,14 @@ class ArbolRojoNegro
 
 				if(hermanoTemporal->tipo == ArbolRojoNegro::Connector::tipoNodo) // Comparación es segura porque la estructura del árbol evita connectores nulos
 				{
-					std::cout << "HAY NODO HERMANO" << std::endl;
+					// std::cout << "HAY NODO HERMANO" << std::endl;
 					// Castings son seguros porque se garantizó que ambos conectores existen y son nodos
 					Nodo* nodoHermano = dynamic_cast<Nodo*>(hermanoTemporal);
 					Nodo* nodoHijo = dynamic_cast<Nodo*>(connectorHijoActual);
 
 					if(nodoHermano->color == Nodo::rojo && nodoHijo->color == Nodo::rojo) 
 					{
-						std::cout << "Es hora de hacer color flip!" << std::endl;
+						// std::cout << "Es hora de hacer color flip!" << std::endl;
 						CF(nodoActual);
 					}
 				}
@@ -564,7 +564,7 @@ class ArbolRojoNegro
 				// Ahora sí, podemos descender.
 				if(bandera == 0) // El primer descenso es especial, está garantizado, y se conoce el bisabuelo, pues es la dirección de la raíz
 				{
-					std::cout << "-> bandera es 0" << std::endl;
+					// std::cout << "-> bandera es 0" << std::endl;
 					bis = &raiz;
 					lado_desfasado_1 = ladoActual;
 
@@ -572,7 +572,7 @@ class ArbolRojoNegro
 				}
 				else // El resto de descensos son fácilmente iterables
 				{
-					std::cout << "-> bandera es > 0" << std::endl;
+					// std::cout << "-> bandera es > 0" << std::endl;
 					bis_desfasado = bis;
 					bis = &(dynamic_cast<Nodo*>(*bis_desfasado)->hijos[lado_desfasado_1]);
 
@@ -581,11 +581,11 @@ class ArbolRojoNegro
 
 				nodoActual = dynamic_cast<Nodo*>(connectorHijoActual);
 
-				std::cout << "-> raiz apunta a " << (*raiz).llave << std::endl;
-				std::cout << "-> bis apunta a " << (*bis)->llave << std::endl;
-				std::cout << "-> nodo actual es " << nodoActual->llave << std::endl;
-				std::cout << "-> hijo izq es " << nodoActual->hijos[Nodo::ladoIzquierdo]->llave << std::endl;
-				std::cout << "-> hijo der es " << nodoActual->hijos[Nodo::ladoDerecho]->llave << std::endl;
+				// std::cout << "-> raiz apunta a " << (*raiz).llave << std::endl;
+				// std::cout << "-> bis apunta a " << (*bis)->llave << std::endl;
+				// std::cout << "-> nodo actual es " << nodoActual->llave << std::endl;
+				// std::cout << "-> hijo izq es " << nodoActual->hijos[Nodo::ladoIzquierdo]->llave << std::endl;
+				// std::cout << "-> hijo der es " << nodoActual->hijos[Nodo::ladoDerecho]->llave << std::endl;
 
 				if(llave == nodoActual->llave) return 0; // Llave preexistente, no vale la pena seguir bajando
 
@@ -594,13 +594,13 @@ class ArbolRojoNegro
 
 				connectorHijoActual = nodoActual->hijos[ladoActual];
 
-				std::cout << "-> hijo actual ahora es " << connectorHijoActual->llave << std::endl;
-				std::cout << "-> hijo actual ahora es ";
-				if(connectorHijoActual->tipo == ArbolRojoNegro::Connector::tipoHoja) std::cout << "UNA HOJA" << std::endl;
-				else std::cout << "UN NODO" << std::endl;
+				// std::cout << "-> hijo actual ahora es " << connectorHijoActual->llave << std::endl;
+				// std::cout << "-> hijo actual ahora es ";
+				// if(connectorHijoActual->tipo == ArbolRojoNegro::Connector::tipoHoja) std::cout << "UNA HOJA" << std::endl;
+				// else std::cout << "UN NODO" << std::endl;
 			}
 
-			std::cout << "Es hora de insertar!" << std::endl;
+			// std::cout << "Es hora de insertar!" << std::endl;
 
 			// Tenemos que el connector siguiente es una hoja, y podemos realizar una inserción
 			if(llave == connectorHijoActual->llave) return 0; // Llave ya preexistente
@@ -612,40 +612,40 @@ class ArbolRojoNegro
 			nodoActual->hijos[ladoActual] = (Connector*) nuevoNodo;
 			if(llave < hojaMinima->llave) hojaMinima = nuevaHoja;
 
-			std::cout << "Es hora de verificar rotaciones!" << std::endl;
+			// std::cout << "Es hora de verificar rotaciones!" << std::endl;
 
 			// Realizamos la rotación necesaria, si acaso
 			char codigoRotacion = verificarRotacion(bis);
-			std::cout << "Rotaciones verificadas!" << std::endl;
+			// std::cout << "Rotaciones verificadas!" << std::endl;
 
 			switch (codigoRotacion)
 			{
 				case char(0):
-					std::cout << "NO HAY QUE HACER NADA" << std::endl;
+					// std::cout << "NO HAY QUE HACER NADA" << std::endl;
 					break;
 
 				case char(1):
-					std::cout << "-> rotacion simple izquierda" << std::endl;
+					// std::cout << "-> rotacion simple izquierda" << std::endl;
 					RSI(bis);
 					break;
 
 				case char(2):
-					std::cout << "-> rotacion simple derecha" << std::endl;
+					// std::cout << "-> rotacion simple derecha" << std::endl;
 					RSD(bis);
 					break;
 
 				case char(3):
-					std::cout << "-> rotacion doble izquierda" << std::endl;
+					// std::cout << "-> rotacion doble izquierda" << std::endl;
 					RDI(bis);
 					break;
 
 				case char(4):
-					std::cout << "-> rotacion doble derecha" << std::endl;
+					// std::cout << "-> rotacion doble derecha" << std::endl;
 					RDD(bis);
 					break;
 				
 				default:
-					std::cout << "CODIGO INVALIDO" << std::endl;
+					// std::cout << "CODIGO INVALIDO" << std::endl;
 					break;
 			}
 
@@ -669,16 +669,16 @@ class ArbolRojoNegro
 				if(actual->llave < llave) ladoActual = Nodo::ladoDerecho;
 				else ladoActual = Nodo::ladoIzquierdo;
 
-				std::cout << "Llave recibida es " << llave << std::endl;
-				std::cout << "Llave de connector actual es " << actual->llave << std::endl;
+				// std::cout << "Llave recibida es " << llave << std::endl;
+				// std::cout << "Llave de connector actual es " << actual->llave << std::endl;
 				
-				std::cout << "Color de conector actual es ";
-				if(nodoActual->color == Nodo::negro) std::cout << "NEGRO" << std::endl;
-				else std::cout << "ROJO" << std::endl;
+				// std::cout << "Color de conector actual es ";
+				// if(nodoActual->color == Nodo::negro) std::cout << "NEGRO" << std::endl;
+				// else std::cout << "ROJO" << std::endl;
 
-				std::cout << "Lado que vamos a tomar es ";
-				if(ladoActual == Nodo::ladoIzquierdo) std::cout << "IZQUIERDO" << std::endl;
-				else std::cout << "DERECHO" << std::endl;
+				// std::cout << "Lado que vamos a tomar es ";
+				// if(ladoActual == Nodo::ladoIzquierdo) std::cout << "IZQUIERDO" << std::endl;
+				// else std::cout << "DERECHO" << std::endl;
 
 				// El nuevo conector actual va a ser el hijo de este conector actual, según el lado elegido mediante la llave
 				actual = nodoActual->hijos[ladoActual];
