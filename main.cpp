@@ -15,9 +15,9 @@ using namespace std;
 
 /**
  * @brief El metodo existe permite verificar si un pair ya existe en el vector con la llave dada
- * @param arrayString El string que hay que buscar
+ * @param arrayString El string que hay que buscar en el vector
  * @param palabras Es un vector<pair<string,string,>> 
- * @return
+ * @return El metodo devuelve un int, si el elemento existe devuelve un 1, sino devuelve un 0
  */
 int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 	int existe = 0;
@@ -31,12 +31,29 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 
 //#############################################################################################################################
 
+
+/**
+ * @brief El metodo probarArbol permite realizar las pruebas con el arbol rojo y negro
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el arbol rojo y negro
+ * @param pasoPrueba pasoPrueba es la cantidad de elementos por prueba
+ * @param cantidadPruebas cantidadPruebas es la cantidad de pruebas que hay que realizar
+ * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
+ */
 vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 }
 
 //#############################################################################################################################
-	
+
+/**
+ * @brief El metodo robarMapSTL permite realizar las pruebas con el map de la STL
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el map de la STL
+ * @param pasoPrueba pasoPrueba es la cantidad de elementos por prueba
+ * @param cantidadPruebas cantidadPruebas es la cantidad de pruebas que hay que realizar
+ * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
+ */
 vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 	map <string,string> mapSTL;
@@ -75,6 +92,14 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
 
 //#############################################################################################################################
 
+/**
+ * @brief El metodo probarVectorSTL permite realizar las pruebas con el vector de la STL, esun vector de pair<key, value>
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el vector de la STL
+ * @param pasoPrueba pasoPrueba es la cantidad de elementos por prueba
+ * @param cantidadPruebas cantidadPruebas es la cantidad de pruebas que hay que realizar
+ * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
+ */
 vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
 {
 	vector<pair<string,string>> palabras;
@@ -116,6 +141,11 @@ vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura
 
 //#############################################################################################################################
 
+/**
+ * @brief El metodo lector permite leer el archivo de texto y guarda el contenido en arrayString
+ * @param arrayString arrayString es un array en el cual hay que guardar todas las palabras del archivo nombreArchivo
+ * @param nombreArchivo nombreArchivo es un string que contiene el nombre del archivo que hay que leer y del cual queremos guardar el contenido en arrayString
+ */
 void lector(string* arrayString, string nombreArchivo)
 {
     string word;
@@ -190,6 +220,9 @@ void probarArbol_s()
     }
 }
 
+/**
+ * @brief El metodo main maneja todo el programa y llama los metodos necesarios para el buen desarrollo del programa
+ */
 int main()
 {
 
