@@ -18,7 +18,7 @@ class ArbolRojoNegro
                 static const char tipoNodo = 1;
                 static const char tipoHoja = 0;
 
-                Connector();
+                Connector(){}; // Tiene cuerpo porque sub-clases llaman a los constructores en jerarquía, incluso si esta clase es abstracta
                 virtual ~Connector() = 0;
         };
 
