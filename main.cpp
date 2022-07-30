@@ -172,6 +172,12 @@ void lector(string* arrayString, string nombreArchivo, unsigned int cantidadPala
 int main()
 {
 
+	ArbolRojoNegro<string, int> a;
+	a.insertarDato(10, "hola");
+	a.insertarDato(12, "bye!");
+
+	std::cout << *a.begin() << std::endl;
+
     // probarArbol_s();
 
 	int cantidadElementosLectura;		// cantidad de palabras que hay que leer del archivo y guardar en la data structures
