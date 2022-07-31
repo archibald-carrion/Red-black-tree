@@ -55,7 +55,7 @@ double promediarTiempos(const vector<double>& tiempos)
  */
 vector<double> probarArbol(const ArbolRojoNegro<string, string>& arbolRojoNegro, string* arrayString, int cantidadElementosLectura, int tamanoBatch, int cantidadBatches)
 {
-	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
+	// std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	vector<double> tiemposEjecuciones; bool overflowPosible = false;
 	for(unsigned int counter1 = 0; counter1 < cantidadBatches && !overflowPosible; ++counter1)
@@ -75,10 +75,10 @@ vector<double> probarArbol(const ArbolRojoNegro<string, string>& arbolRojoNegro,
 			tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
 		}
 
-		std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
+		// std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
 	}
 
-	std::cout << "]" << std::endl; // Mostrar progreso (lado derecho de barra de progreso)
+	// std::cout << "]" << std::endl; // Mostrar progreso (lado derecho de barra de progreso)
 
 	return tiemposEjecuciones;
 }
@@ -93,7 +93,7 @@ vector<double> probarArbol(const ArbolRojoNegro<string, string>& arbolRojoNegro,
  */
 vector<double> probarMapSTL(const map<string, string>& mapaSTL, string* arrayString, int cantidadElementosLectura, int tamanoBatch, int cantidadBatches)
 {
-	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
+	// std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	vector<double> tiemposEjecuciones; bool overflowPosible = false;
 	for(unsigned int counter1 = 0; counter1 < cantidadBatches && !overflowPosible; ++counter1)
@@ -113,10 +113,10 @@ vector<double> probarMapSTL(const map<string, string>& mapaSTL, string* arrayStr
 			tiemposEjecuciones.push_back(tiempoEjecucion);	//agregar el tiempo al vector de tiempo
 		}
 
-		std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
+		// std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
 	}
 
-	std::cout << "]" << std::endl; // Mostrar progreso (lado izquierdo de barra de progreso)
+	// std::cout << "]" << std::endl; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	return tiemposEjecuciones;
 }
@@ -133,7 +133,7 @@ vector<double> probarVectorSTL(const vector<pair<string, string>>& vectorSTL, st
 {
 	Predicado::init();
 
-	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
+	// std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	//Hacer la busqueda
 	vector<double> tiempos; bool posibleOverflow = false;
@@ -159,10 +159,10 @@ vector<double> probarVectorSTL(const vector<pair<string, string>>& vectorSTL, st
 			tiempos.push_back(tiempoEjecucion);
 		}
 
-		std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
+		// std::cout << "#"; // Mostrar progreso (bloquecito de prueba)
 	}
 
-	std::cout << "]" << std::endl; // Mostrar progreso (lado izquierdo de barra de progreso)
+	// std::cout << "]" << std::endl; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	return tiempos;
 }
