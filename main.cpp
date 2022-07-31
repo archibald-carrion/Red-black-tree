@@ -191,6 +191,12 @@ void lector(string* arrayString, string nombreArchivo, unsigned int cantidadPala
 	return;
 }
 
+/**
+ * @brief El metodo generarVectorParejasString permite crear un vector de pair de la STL
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el vector de la STL
+ * @return El metodo devuelve un vector<pair<string,string>> que contiene la cantidad de palabras necesarias para la ejecución del las pruebas
+ */
 vector<pair<string,string>> generarVectorParejasString(string* arrayString, int cantidadElementosLectura)
 {
 	vector<pair<string,string>> vectorSTL;
@@ -209,6 +215,12 @@ vector<pair<string,string>> generarVectorParejasString(string* arrayString, int 
 	return vectorSTL;
 }
 
+/**
+ * @brief El metodo generarMapaParejasString permite crear un map de la STL
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el vector de la STL
+ * @return El metodo devuelve un map<string, string> que contiene la cantidad de palabras necesarias para la ejecución del las pruebas
+ */
 map<string, string> generarMapaParejasString(string* arrayString, int cantidadElementosLectura)
 {
 	map <string,string> mapSTL;
@@ -228,6 +240,12 @@ map<string, string> generarMapaParejasString(string* arrayString, int cantidadEl
 	return mapSTL;
 }
 
+/**
+ * @brief El metodo generarArbolRojoNegroParejasString permite crear un ArbolRojoNegro
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el vector de la STL
+ * @return El metodo devuelve un ArbolRojoNegro<string, string> que contiene la cantidad de palabras necesarias para la ejecución del las pruebas
+ */
 ArbolRojoNegro<string, string> generarArbolRojoNegroParejasString(string* arrayString, int cantidadElementosLectura)
 {
 	ArbolRojoNegro<string,string> arbolRojoNegro;
@@ -248,6 +266,14 @@ ArbolRojoNegro<string, string> generarArbolRojoNegroParejasString(string* arrayS
 	return arbolRojoNegro;
 }
 
+/**
+ * @brief El metodo tabularPromedios permite calcular los tiempos promedios e imprimirlos en la salida estandar
+ * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
+ * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el vector de la STL
+ * @param pasoPruebaInicial pasoPruebaInicial es la cantidad de elementos por prueba
+ * @param cantidadExperimentos cantidadPruebas es la cantidad de pruebas que hay que realizar
+ * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
+ */
 void tabularPromedios(string* arrayString, int cantidadElementosLectura, int pasoPruebaInicial, int cantidadExperimentos)
 {
 	ArbolRojoNegro<string, string> arbolRojoNegro = move(generarArbolRojoNegroParejasString(arrayString, cantidadElementosLectura));
