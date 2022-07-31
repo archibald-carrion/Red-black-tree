@@ -32,6 +32,20 @@ int existe(string palabraBuscada, vector<pair<string,string>> palabras){
 }
 
 /**
+ * @brief El metodo promediarTiempos permite obtener el promedio de un vector de tiempos
+ * @param tiempos Es el vector<double> de los tiempos de busqueda que se desean promediar
+ * @return El metodo devuelve el promedio de los valores existentes en el vector de tiempos
+ */
+double promediarTiempos(const vector<double>& tiempos)
+{
+	double promedio = 0;
+	unsigned long long cantidadTiempos = tiempos.size();
+	for(vector<double>::const_iterator i = tiempos.begin(); i != tiempos.end(); ++i) promedio += *i;
+
+	return (promedio / cantidadTiempos);
+}
+
+/**
  * @brief El metodo probarArbol permite realizar las pruebas con el arbol rojo y negro
  * @param arrayString arrayString es un array que contiene todas las palabras del archivo de texto de input
  * @param cantidadElementosLectura  cantidadElementosLectura es la cantidad de elementos que hay que leer de arraystring y guardar en el arbol rojo y negro
@@ -251,15 +265,18 @@ int main()
 	cout << setprecision(5);
 
 	//guardamos los resultados en una .txt
-	cout << "TIEMPOS DE BUSQUEDA EN MAP STL" << endl;
+	cout << "TIEMPOS DE BUSQUEDA EN MAP STL" << endl
+	<< "PROMEDIO: " << promediarTiempos(resultadoMapSTL) << std::endl;
 	unsigned long long tamanoResultadoMapSTL = resultadoMapSTL.size();
 	for(unsigned long long i = 0; i < tamanoResultadoMapSTL; ++i) cout << i << " " << resultadoMapSTL[i] << endl;
 
-	cout << "TIEMPOS DE BUSQUEDA EN VECTOR STL" << endl;
+	cout << "TIEMPOS DE BUSQUEDA EN VECTOR STL" << endl
+	<< "PROMEDIO: " << promediarTiempos(resultadoVectorSTL) << std::endl;
 	unsigned long long tamanoResultadoVectorSTL = resultadoVectorSTL.size();
 	for(unsigned long long i = 0; i < tamanoResultadoVectorSTL; ++i) cout << i << " " << resultadoVectorSTL[i] << endl;
 
-	cout << "TIEMPOS DE BUSQUEDA EN ARBOL ROJINEGRO NUESTRO" << endl;
+	cout << "TIEMPOS DE BUSQUEDA EN ARBOL ROJINEGRO NUESTRO" << endl
+	<< "PROMEDIO: " << promediarTiempos(resultadoArbolRojoNegro) << std::endl;
 	unsigned long long tamanoResultadoRojinegro = resultadoArbolRojoNegro.size();
 	for(unsigned long long i = 0; i < tamanoResultadoRojinegro; ++i) cout << i << " " << resultadoArbolRojoNegro[i] << endl;
 	
