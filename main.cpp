@@ -53,36 +53,21 @@ double promediarTiempos(const vector<double>& tiempos)
  * @param cantidadPruebas cantidadPruebas es la cantidad de pruebas que hay que realizar
  * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
  */
-vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+vector<double> probarArbol(const ArbolRojoNegro<string, string>& arbolRojoNegro, string* arrayString, int cantidadElementosLectura, int tamanoBatch, int cantidadBatches)
 {
-	//ArbolRojoNegro * arbol = new ArbolRojoNegro();
-	ArbolRojoNegro<string,string> arbol;
-	int counter0=0;
-	//llenar el mapa, investigando parejas hasta la penúltima palabra con la última
-	while(counter0<cantidadElementosLectura-1){
-		if(arbol.find(arrayString[counter0]) == arbol.end()){		// la llave aun no existe en el map
-			arbol.insertarDato(arrayString[counter0], arrayString[counter0+1]);
-		}														// la llave ya existe en el map
-		++counter0;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
-	}
-
-	// el caso de la última palabra es especial. si no existe previamente en el mapa, se asocia con una palabra vacía
-	if(arbol.find(arrayString[cantidadElementosLectura-1]) == arbol.end())
-	arbol.insertarDato(arrayString[cantidadElementosLectura-1], string(""));
-	
 	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	vector<double> tiemposEjecuciones; bool overflowPosible = false;
-	for(unsigned int counter1 = 0; counter1 < cantidadPruebas && !overflowPosible; ++counter1)
+	for(unsigned int counter1 = 0; counter1 < cantidadBatches && !overflowPosible; ++counter1)
 	{
-		if(pasoPrueba > (cantidadElementosLectura - (counter1 * pasoPrueba)))  overflowPosible = true;
+		if(tamanoBatch > (cantidadElementosLectura - (counter1 * tamanoBatch)))  overflowPosible = true;
 		else
 		{
 			auto start = chrono::steady_clock::now();
-			for(int counter2 = 0; counter2 < pasoPrueba; ++counter2)
+			for(int counter2 = 0; counter2 < tamanoBatch; ++counter2)
 			{
-				arbol.find(arrayString[counter1*pasoPrueba + counter2]);
-				arbol.find(arrayString[counter1*pasoPrueba + counter2] + string("NoIsE"));
+				arbolRojoNegro.find(arrayString[(counter1 * tamanoBatch) + counter2]);
+				arbolRojoNegro.find(arrayString[(counter1 * tamanoBatch) + counter2] + string("NoIsE"));
 			}
 			auto end = chrono::steady_clock::now();
 
@@ -106,35 +91,21 @@ vector<double> probarArbol(string* arrayString, int cantidadElementosLectura, in
  * @param cantidadPruebas cantidadPruebas es la cantidad de pruebas que hay que realizar
  * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
  */
-vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+vector<double> probarMapSTL(const map<string, string>& mapaSTL, string* arrayString, int cantidadElementosLectura, int tamanoBatch, int cantidadBatches)
 {
-	map <string,string> mapSTL;
-	int counter0=0;
-	//llenar el mapa, investigando parejas hasta la penúltima palabra con la última
-	while(counter0<cantidadElementosLectura-1){
-		if(mapSTL.find(arrayString[counter0]) == mapSTL.end()){		// la llave aun no existe en el map
-			mapSTL[arrayString[counter0]] = arrayString[counter0+1];
-		}														// la llave ya existe en el map
-		++counter0;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
-	}
-
-	// el caso de la última palabra es especial. si no existe previamente en el mapa, se asocia con una palabra vacía
-	if(mapSTL.find(arrayString[cantidadElementosLectura-1]) == mapSTL.end())
-	mapSTL[arrayString[cantidadElementosLectura-1]] = string("");
-	
 	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	vector<double> tiemposEjecuciones; bool overflowPosible = false;
-	for(unsigned int counter1 = 0; counter1 < cantidadPruebas && !overflowPosible; ++counter1)
+	for(unsigned int counter1 = 0; counter1 < cantidadBatches && !overflowPosible; ++counter1)
 	{
-		if(pasoPrueba > (cantidadElementosLectura - (counter1 * pasoPrueba)))  overflowPosible = true;
+		if(tamanoBatch > (cantidadElementosLectura - (counter1 * tamanoBatch)))  overflowPosible = true;
 		else
 		{
 			auto start = chrono::steady_clock::now();
-			for(int counter2 = 0; counter2 < pasoPrueba; ++counter2)
+			for(int counter2 = 0; counter2 < tamanoBatch; ++counter2)
 			{
-				mapSTL.find(arrayString[counter1*pasoPrueba + counter2]);
-				mapSTL.find(arrayString[counter1*pasoPrueba + counter2] + string("NoIsE"));
+				mapaSTL.find(arrayString[counter1*tamanoBatch + counter2]);
+				mapaSTL.find(arrayString[counter1*tamanoBatch + counter2] + string("NoIsE"));
 			}
 			auto end = chrono::steady_clock::now();
 
@@ -158,42 +129,29 @@ vector<double> probarMapSTL(string* arrayString, int cantidadElementosLectura, i
  * @param cantidadPruebas cantidadPruebas es la cantidad de pruebas que hay que realizar
  * @return El metodo devuelve un vector<double> que contiene los cantitdadPruebas tiempos de ejecucion, nos permitiran graficar la evolucion del tiempo
  */
-vector<double> probarVectorSTL(string* arrayString, int cantidadElementosLectura, int pasoPrueba, int cantidadPruebas)
+vector<double> probarVectorSTL(const vector<pair<string, string>>& vectorSTL, string* arrayString, int cantidadElementosLectura, int tamanoBatch, int cantidadBatches)
 {
 	Predicado::init();
-	vector<pair<string,string>> palabras;
-
-    Predicado::init();
-
-	//Llenar el vector palabras
-	for(int i=0; i< cantidadElementosLectura-1; ++i){ //Se revisa si la palabra ya esta en el vector
-		if(!existe(arrayString[i], palabras)){
-			palabras.push_back(pair<string,string>(arrayString[i],arrayString[i+1]));
-		}
-	}
-	if(!existe(arrayString[cantidadElementosLectura-1], palabras)){ //La ultima palabra se añade junto con una palabra nula
-		palabras.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],string("")));
-	}
 
 	std::cout << "["; // Mostrar progreso (lado izquierdo de barra de progreso)
 
 	//Hacer la busqueda
 	vector<double> tiempos; bool posibleOverflow = false;
-	for(unsigned int i=0; i < cantidadPruebas && !posibleOverflow; ++i)
+	for(unsigned int i=0; i < cantidadBatches&& !posibleOverflow; ++i)
     {
-		if(pasoPrueba > (cantidadElementosLectura - (i * pasoPrueba)))  posibleOverflow = true;
+		if(tamanoBatch > (cantidadElementosLectura - (i * tamanoBatch)))  posibleOverflow = true;
 		else
 		{
 			auto start = chrono::steady_clock::now();
-			for(int j = 0; j < pasoPrueba; ++j)
+			for(int j = 0; j < tamanoBatch; ++j)
 			{	
-				string palabraBuscada = arrayString[j + i*pasoPrueba];
+				string palabraBuscada = arrayString[j + i*tamanoBatch];
 
 				Predicado::setObjetivo(palabraBuscada);
-				find_if(palabras.begin(), palabras.end(), Predicado::existe);
+				find_if(vectorSTL.begin(), vectorSTL.end(), Predicado::existe);
 
 				Predicado::setObjetivo(palabraBuscada + string("NoIsE"));
-				find_if(palabras.begin(), palabras.end(), Predicado::existe);
+				find_if(vectorSTL.begin(), vectorSTL.end(), Predicado::existe);
 			}
 			auto end = chrono::steady_clock::now();
 
@@ -233,6 +191,83 @@ void lector(string* arrayString, string nombreArchivo, unsigned int cantidadPala
 	return;
 }
 
+vector<pair<string,string>> generarVectorParejasString(string* arrayString, int cantidadElementosLectura)
+{
+	vector<pair<string,string>> vectorSTL;
+
+	//Llenar el vector palabras
+	for(int i=0; i< cantidadElementosLectura-1; ++i){ //Se revisa si la palabra ya esta en el vector
+		if(!existe(arrayString[i], vectorSTL)){
+			vectorSTL.push_back(pair<string,string>(arrayString[i],arrayString[i+1]));
+		}
+	}
+
+	if(!existe(arrayString[cantidadElementosLectura-1], vectorSTL)){ //La ultima palabra se añade junto con una palabra nula
+		vectorSTL.push_back(pair<string,string>(arrayString[cantidadElementosLectura-1],string("")));
+	}
+
+	return vectorSTL;
+}
+
+map<string, string> generarMapaParejasString(string* arrayString, int cantidadElementosLectura)
+{
+	map <string,string> mapSTL;
+	int counter_b=0;
+	//llenar el mapa, investigando parejas hasta la penúltima palabra con la última
+	while(counter_b<cantidadElementosLectura-1){
+		if(mapSTL.find(arrayString[counter_b]) == mapSTL.end()){		// la llave aun no existe en el map
+			mapSTL[arrayString[counter_b]] = arrayString[counter_b+1];
+		}														// la llave ya existe en el map
+		++counter_b;	//que la palabra ya existe o no en el map de toda manera se incrementa el contador
+	}
+
+	// el caso de la última palabra es especial. si no existe previamente en el mapa, se asocia con una palabra vacía
+	if(mapSTL.find(arrayString[cantidadElementosLectura-1]) == mapSTL.end())
+	mapSTL[arrayString[cantidadElementosLectura-1]] = string("");
+
+	return mapSTL;
+}
+
+ArbolRojoNegro<string, string> generarArbolRojoNegroParejasString(string* arrayString, int cantidadElementosLectura)
+{
+	ArbolRojoNegro<string,string> arbolRojoNegro;
+
+	int counter0=0;
+	//llenar el arbol, investigando parejas hasta la penúltima palabra con la última
+	while(counter0<cantidadElementosLectura-1){
+		if(arbolRojoNegro.find(arrayString[counter0]) == arbolRojoNegro.end()){        // la llave aun no existe en el map
+			arbolRojoNegro.insertarDato(arrayString[counter0], arrayString[counter0+1]);
+		}                                                        // la llave ya existe en el map
+		++counter0;    //que la palabra ya existe o no en el map de toda manera se incrementa el contador
+	}
+
+	// el caso de la ultima palabra es especial. si no existe previamente en el arbol, se asocia con una palabra vacía
+	if(arbolRojoNegro.find(arrayString[cantidadElementosLectura-1]) == arbolRojoNegro.end())
+	arbolRojoNegro.insertarDato(arrayString[cantidadElementosLectura-1], string(""));
+
+	return arbolRojoNegro;
+}
+
+void tabularPromedios(string* arrayString, int cantidadElementosLectura, int pasoPruebaInicial, int cantidadExperimentos)
+{
+	ArbolRojoNegro<string, string> arbolRojoNegro = move(generarArbolRojoNegroParejasString(arrayString, cantidadElementosLectura));
+	map<string, string> mapSTL = move(generarMapaParejasString(arrayString, cantidadElementosLectura));
+	vector<pair<string,string>> vectorSTL = move(generarVectorParejasString(arrayString, cantidadElementosLectura));
+
+	std::cout << "VectorSTL" << '\t' << "MapaSTL" << '\t' << "ArbolRojiNegro" << std::endl << scientific << setprecision(5);
+	for(unsigned long long i = 0; i < cantidadExperimentos; ++i)
+	{
+		int pasoPruebaActual = (i+1)*pasoPruebaInicial;
+		double promedioVecSTL = promediarTiempos(probarVectorSTL(vectorSTL, arrayString, cantidadElementosLectura, pasoPruebaActual, 10));
+		double promedioMapSTL = promediarTiempos(probarMapSTL(mapSTL, arrayString, cantidadElementosLectura, pasoPruebaActual, 10));
+		double promedioArbolRojoNegro = promediarTiempos(probarArbol(arbolRojoNegro, arrayString, cantidadElementosLectura, pasoPruebaActual, 10));
+
+		std::cout << promedioVecSTL << '\t' << promedioMapSTL << '\t' << promedioArbolRojoNegro << std::endl;
+	}
+
+	return;
+}
+
 /**
  * @brief El metodo main maneja todo el programa y llama los metodos necesarios para el buen desarrollo del programa
  */
@@ -240,8 +275,8 @@ int main()
 {
 	int cantidadElementosLectura;		// cantidad de palabras que hay que leer del archivo y guardar en la data structures
 	cin>>cantidadElementosLectura;		
-	int pasoPrueba;						// cantidad de palabras que hay que probar por pruebas
-	cin>>pasoPrueba;
+	int pasoPruebaInicial;						// cantidad de palabras que hay que probar por pruebas
+	cin>>pasoPruebaInicial;
 	int cantidadPruebas;				// cantidad de pruebas que hay que hacer 
 	cin>>cantidadPruebas;
 	string nombreArchivo;  				//"datos.txt"	--> nombre del archivo que hay que leer 
@@ -249,37 +284,15 @@ int main()
 
 	cout << "PARAMETROS : " << endl
 	<< "cantidadElementosLectura = " << cantidadElementosLectura << endl
-	<< "pasoPrueba = " << pasoPrueba << endl
+	<< "pasoPruebaInicial = " << pasoPruebaInicial << endl
 	<< "cantidadPruebas = " << cantidadPruebas << endl
 	<< "nombreArchivo = " << nombreArchivo << endl;
 	
     string *arrayString = new string[cantidadElementosLectura];
     lector(arrayString, nombreArchivo, cantidadElementosLectura);
 
-	//se guarda todos los tiempos de ejecución en vectores
-	vector<double> resultadoArbolRojoNegro = move(probarArbol(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
-	vector<double> resultadoMapSTL = move(probarMapSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
-	vector<double> resultadoVectorSTL = move(probarVectorSTL(arrayString,cantidadElementosLectura, pasoPrueba, cantidadPruebas));
+	tabularPromedios(arrayString, cantidadElementosLectura, pasoPruebaInicial, cantidadPruebas);
 
-	cout << scientific;
-	cout << setprecision(5);
-
-	//guardamos los resultados en una .txt
-	cout << "TIEMPOS DE BUSQUEDA EN MAP STL" << endl
-	<< "PROMEDIO: " << promediarTiempos(resultadoMapSTL) << std::endl;
-	unsigned long long tamanoResultadoMapSTL = resultadoMapSTL.size();
-	for(unsigned long long i = 0; i < tamanoResultadoMapSTL; ++i) cout << i << " " << resultadoMapSTL[i] << endl;
-
-	cout << "TIEMPOS DE BUSQUEDA EN VECTOR STL" << endl
-	<< "PROMEDIO: " << promediarTiempos(resultadoVectorSTL) << std::endl;
-	unsigned long long tamanoResultadoVectorSTL = resultadoVectorSTL.size();
-	for(unsigned long long i = 0; i < tamanoResultadoVectorSTL; ++i) cout << i << " " << resultadoVectorSTL[i] << endl;
-
-	cout << "TIEMPOS DE BUSQUEDA EN ARBOL ROJINEGRO NUESTRO" << endl
-	<< "PROMEDIO: " << promediarTiempos(resultadoArbolRojoNegro) << std::endl;
-	unsigned long long tamanoResultadoRojinegro = resultadoArbolRojoNegro.size();
-	for(unsigned long long i = 0; i < tamanoResultadoRojinegro; ++i) cout << i << " " << resultadoArbolRojoNegro[i] << endl;
-	
     delete[] arrayString;
     return 0;
 }

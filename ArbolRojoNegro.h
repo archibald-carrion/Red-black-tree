@@ -1,7 +1,7 @@
 #ifndef _ARBOLROJONEGRO_
 #define _ARBOLROJONEGRO_
 
-// #include <iostream> // Para imprimir los mensajes de debugging
+#include <iostream> // Para imprimir los mensajes de debugging
 
 template <class K, class V> //K es llave, V es valor
 
@@ -65,7 +65,7 @@ class ArbolRojoNegro
 
                 Nodo();
                 ~Nodo()
-                {if(hijos[0] != 0) delete hijos[0]; if(hijos[1] != 0) delete hijos[1];};
+                {if(hijos[0] != 0) delete hijos[0]; if(hijos[1] != 0) delete hijos[1];}
 
 				/**
 				 * @brief Constructor con parametros de Nodo
@@ -446,13 +446,27 @@ class ArbolRojoNegro
 			raiz = 0;
 			hojaMinima = 0;
 		}
+
+		/**
+		 * @brief Constructor por r-value de ArbolRojoNegro
+		 * @param otroArbolMovido r-value de arbol cuyos recursos queremos robar
+		 * Utilizado para robar recursos de un r-value tras un move
+		**/
+		ArbolRojoNegro(ArbolRojoNegro&& otroArbolMovido)
+		{
+			raiz = otroArbolMovido.raiz;
+			hojaMinima = otroArbolMovido.hojaMinima;
+
+			otroArbolMovido.raiz = 0;
+		}
+
 		/**
 		 * @brief Destructor de ArbolRojoNegro
 		**/
 		~ArbolRojoNegro()
 		{
 			// Desctructor recursivo, en cadena
-			if(raiz) delete raiz;
+			if(raiz != 0) delete raiz;
 		}
 
 		/**
@@ -656,7 +670,7 @@ class ArbolRojoNegro
 		 * @param llave llave es el unico parametro que recibe el metodo find, es la llave que se tiene que buscar en el arbol para saber si ya existe un elemento en arbol con la misma llave
 		 * @return El metodo find devuelve un ArbolRojoNegro::Iterador que apunta a la hoja del arbol que contiene el elemento con la llave dada, si no se encontra un elemento con la misma llave entonces signica que no existe en el arbol y por lo tanto devuelve un puntero que apunta a 0 (dirreción hoja nula)
 		**/
-		Iterador find(const K& llave)
+		Iterador find(const K& llave) const
 		{
 			if(raiz == 0) return Iterador(0); // Caso trivial, la raiz es nula, no se puede buscar
 
