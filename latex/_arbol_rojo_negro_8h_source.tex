@@ -1,0 +1,587 @@
+\hypertarget{_arbol_rojo_negro_8h_source}{}\doxysection{Arbol\+Rojo\+Negro.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef \_ARBOLROJONEGRO\_}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define \_ARBOLROJONEGRO\_}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <iostream>} \textcolor{comment}{// Para imprimir los mensajes de debugging}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{template} <\textcolor{keyword}{class} K, \textcolor{keyword}{class} V> \textcolor{comment}{//K es llave, V es valor}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{keyword}{class }\mbox{\hyperlink{class_arbol_rojo_negro}{ArbolRojoNegro}}}
+\DoxyCodeLine{9 \{}
+\DoxyCodeLine{10     \textcolor{keyword}{private}:}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12         \textcolor{keyword}{class }Connector}
+\DoxyCodeLine{13         \{}
+\DoxyCodeLine{14             \textcolor{keyword}{public}:}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16                 K llave;}
+\DoxyCodeLine{17                 \textcolor{keywordtype}{char} tipo;      \textcolor{comment}{//differenciar si es nodo o hoja -\/-\/> nodo = 0, hoja = 1}}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19                 \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} negro = 1;}
+\DoxyCodeLine{20                 \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} rojo = 0;}
+\DoxyCodeLine{21                 }
+\DoxyCodeLine{22                 \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} tipoNodo = 1;}
+\DoxyCodeLine{23                 \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} tipoHoja = 0;}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{25                 Connector()\{\}; \textcolor{comment}{// Tiene cuerpo porque sub-\/clases llaman a los constructores en jerarquía, incluso si esta clase es abstracta}}
+\DoxyCodeLine{26                 \textcolor{keyword}{virtual} \string~Connector()\{\}; \textcolor{comment}{// También tiene cuerpo porque sub-\/clases llaman a los destructores en jerarquía, incluso si esta clase es abstracta}}
+\DoxyCodeLine{27         \};}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{29         \textcolor{keyword}{class }Hoja : \textcolor{keyword}{public} Connector}
+\DoxyCodeLine{30         \{}
+\DoxyCodeLine{31             \textcolor{keyword}{public}:}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33                 V valor;}
+\DoxyCodeLine{34                 Hoja* next;}
+\DoxyCodeLine{35                 Hoja* previous;}
+\DoxyCodeLine{44                 Hoja(\textcolor{keyword}{const} V\& valorTemporal, \textcolor{keyword}{const} K\& llaveTemporal)}
+\DoxyCodeLine{45                 \{}
+\DoxyCodeLine{46                     this-\/>valor = valorTemporal;}
+\DoxyCodeLine{47                     this-\/>llave = llaveTemporal;}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49                     this-\/>next = 0;}
+\DoxyCodeLine{50                     this-\/>previous = 0;}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{52                     this-\/>tipo = ArbolRojoNegro::Connector::tipoHoja;}
+\DoxyCodeLine{53                 \}}
+\DoxyCodeLine{54                 \string~Hoja()\{\};}
+\DoxyCodeLine{55         \};}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57         \textcolor{keyword}{class }Nodo : \textcolor{keyword}{public} Connector}
+\DoxyCodeLine{58         \{}
+\DoxyCodeLine{59             \textcolor{keyword}{public}:}
+\DoxyCodeLine{60                 \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} ladoIzquierdo = 0;}
+\DoxyCodeLine{61                 \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char} ladoDerecho = 1;}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63                 Connector* hijos[2];   \textcolor{comment}{//0 es izquierda, 1 es derecha }}
+\DoxyCodeLine{64                 \textcolor{keywordtype}{char} color;}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66                 Nodo();}
+\DoxyCodeLine{67                 \string~Nodo()}
+\DoxyCodeLine{68                 \{\textcolor{keywordflow}{if}(hijos[0] != 0) \textcolor{keyword}{delete} hijos[0]; \textcolor{keywordflow}{if}(hijos[1] != 0) \textcolor{keyword}{delete} hijos[1];\}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{77                 Nodo(Hoja* hoja\_A, Hoja* hoja\_B, \textcolor{keywordtype}{char} color)}
+\DoxyCodeLine{78                 \{}
+\DoxyCodeLine{79                     this-\/>tipo = ArbolRojoNegro::Connector::tipoNodo;}
+\DoxyCodeLine{80                     this-\/>color = color;}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82                     \textcolor{keywordflow}{if}(hoja\_A == 0 || hoja\_B == 0) this-\/>llave = K();}
+\DoxyCodeLine{83                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(hoja\_A-\/>llave < hoja\_B-\/>llave) }
+\DoxyCodeLine{84                     \{}
+\DoxyCodeLine{85                         this-\/>llave = hoja\_A-\/>llave;}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87                         this-\/>hijos[ladoIzquierdo] = hoja\_A;}
+\DoxyCodeLine{88                         this-\/>hijos[ladoDerecho] = hoja\_B;}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90                         \textcolor{comment}{// Caso 1 -\/> La hoja A es foránea a la lista doblemente enlazada}}
+\DoxyCodeLine{91                         \textcolor{keywordflow}{if}(hoja\_A-\/>previous == 0 \&\& hoja\_A-\/>next == 0)}
+\DoxyCodeLine{92                         \{}
+\DoxyCodeLine{93                             hoja\_A-\/>previous = hoja\_B-\/>previous;}
+\DoxyCodeLine{94                             \textcolor{keywordflow}{if}(hoja\_B-\/>previous != 0) hoja\_B-\/>previous-\/>next = hoja\_A;}
+\DoxyCodeLine{95                         \}}
+\DoxyCodeLine{96                         \textcolor{comment}{// Caso 2 -\/> La hoja A es nativa a la lista doblemente enlazada}}
+\DoxyCodeLine{97                         \textcolor{keywordflow}{else} }
+\DoxyCodeLine{98                         \{}
+\DoxyCodeLine{99                             hoja\_B-\/>next = hoja\_A-\/>next;}
+\DoxyCodeLine{100                             \textcolor{keywordflow}{if}(hoja\_A-\/>next != 0) hoja\_A-\/>next-\/>previous = hoja\_B;}
+\DoxyCodeLine{101                         \}}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{103                         hoja\_A-\/>next = hoja\_B;}
+\DoxyCodeLine{104                         hoja\_B-\/>previous = hoja\_A;}
+\DoxyCodeLine{105                     \}}
+\DoxyCodeLine{106                     \textcolor{keywordflow}{else} }
+\DoxyCodeLine{107                     \{}
+\DoxyCodeLine{108                         this-\/>llave = hoja\_B-\/>llave;}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110                         this-\/>hijos[ladoDerecho] = hoja\_A;}
+\DoxyCodeLine{111                         this-\/>hijos[ladoIzquierdo] = hoja\_B;}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113                         \textcolor{comment}{// Caso 1 -\/> La hoja B es foránea a la lista doblemente enlazada}}
+\DoxyCodeLine{114                         \textcolor{keywordflow}{if}(hoja\_B-\/>previous == 0 \&\& hoja\_B-\/>next == 0)}
+\DoxyCodeLine{115                         \{}
+\DoxyCodeLine{116                             hoja\_B-\/>previous = hoja\_A-\/>previous;}
+\DoxyCodeLine{117                             \textcolor{keywordflow}{if}(hoja\_A-\/>previous != 0) hoja\_A-\/>previous-\/>next = hoja\_B;}
+\DoxyCodeLine{118                         \}}
+\DoxyCodeLine{119                         \textcolor{comment}{// Caso 2 -\/> La hoja B es nativa a la lista doblemente enlazada}}
+\DoxyCodeLine{120                         \textcolor{keywordflow}{else} }
+\DoxyCodeLine{121                         \{}
+\DoxyCodeLine{122                             hoja\_A-\/>next = hoja\_B-\/>next;}
+\DoxyCodeLine{123                             \textcolor{keywordflow}{if}(hoja\_B-\/>next != 0) hoja\_B-\/>next-\/>previous = hoja\_A;}
+\DoxyCodeLine{124                         \}}
+\DoxyCodeLine{125                         }
+\DoxyCodeLine{126                         hoja\_B-\/>next = hoja\_A;}
+\DoxyCodeLine{127                         hoja\_A-\/>previous = hoja\_B;}
+\DoxyCodeLine{128                     \}}
+\DoxyCodeLine{129                 \}}
+\DoxyCodeLine{133                 \textcolor{keywordtype}{void} colorFlipLocal()}
+\DoxyCodeLine{134                 \{}
+\DoxyCodeLine{135                     \textcolor{keywordflow}{if}(this-\/>color == (\textcolor{keywordtype}{char})0) this-\/>color = (char)1;}
+\DoxyCodeLine{136                     \textcolor{keywordflow}{else} this-\/>color = (char)0; }
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138                     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{139                 \}}
+\DoxyCodeLine{140         \};}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142         Connector* raiz; \textcolor{comment}{//pila -\/> mejor O}}
+\DoxyCodeLine{143         Hoja* hojaMinima;}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{149         \textcolor{keywordtype}{void} CF(Nodo* padre)}
+\DoxyCodeLine{150         \{}
+\DoxyCodeLine{151             \textcolor{keywordflow}{if}(padre == 0) \textcolor{keywordflow}{return}; \textcolor{comment}{// Código defensivo}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153             \textcolor{comment}{// Casting se asume seguro porque padre debe ser un nodo}}
+\DoxyCodeLine{154             \textcolor{keywordflow}{if}(padre != raiz) padre -\/> colorFlipLocal();}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156             \textcolor{comment}{// Se asume que el árbol minimal de nodos existe, y ningulo de los dos hijos es nulo u hoja}}
+\DoxyCodeLine{157             \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(padre-\/>hijos[0]) -\/> colorFlipLocal();}
+\DoxyCodeLine{158             \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(padre-\/>hijos[1]) -\/> colorFlipLocal();}
+\DoxyCodeLine{159         \}}
+\DoxyCodeLine{164         \textcolor{keywordtype}{void} RSI(Connector** bis)}
+\DoxyCodeLine{165         \{}
+\DoxyCodeLine{166             \textcolor{keywordflow}{if}(bis == 0) \textcolor{keywordflow}{return}; \textcolor{comment}{// Código defensivo}}
+\DoxyCodeLine{167             Nodo* nodoBis = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(*bis);}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169             \textcolor{comment}{// Casting se asume seguro porque bisabuelo debe apuntar a un nodo}}
+\DoxyCodeLine{170             Nodo* nuevoPadre = \textcolor{keyword}{dynamic\_cast<}Nodo *\textcolor{keyword}{>}(nodoBis-\/>hijos[Nodo::ladoDerecho]);}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172             \textcolor{comment}{// Se asume que la cadena de nodos existe, y ningulo es nulo}}
+\DoxyCodeLine{173             nodoBis-\/>hijos[Nodo::ladoDerecho] = nuevoPadre-\/>hijos[Nodo::ladoIzquierdo];}
+\DoxyCodeLine{174             nuevoPadre-\/>hijos[0] = (* bis);}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176             (* bis) = nuevoPadre; \textcolor{comment}{// std::cout << "{}RSI EXITOSA"{} << std::endl;}}
+\DoxyCodeLine{177             RC(nuevoPadre);}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{180         \}}
+\DoxyCodeLine{185         \textcolor{keywordtype}{void} RSD(Connector** bis)}
+\DoxyCodeLine{186         \{}
+\DoxyCodeLine{187             \textcolor{keywordflow}{if}(bis == 0) \textcolor{keywordflow}{return}; \textcolor{comment}{// Código defensivo}}
+\DoxyCodeLine{188             Nodo* nodoBis = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(*bis);}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190             \textcolor{comment}{// Casting se asume seguro porque bisabuelo debe apuntar a un nodo}}
+\DoxyCodeLine{191             Nodo* nuevoPadre = \textcolor{keyword}{dynamic\_cast<}Nodo *\textcolor{keyword}{>}(nodoBis-\/>hijos[0]);}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193             \textcolor{comment}{// Se asume que la cadena de nodos existe, y ningulo es nulo}}
+\DoxyCodeLine{194             nodoBis-\/>hijos[0] = nuevoPadre-\/>hijos[1];}
+\DoxyCodeLine{195             nuevoPadre-\/>hijos[1] = (* bis);}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197             (* bis) = nuevoPadre;}
+\DoxyCodeLine{198             RC(nuevoPadre);}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{201         \}}
+\DoxyCodeLine{206         \textcolor{keywordtype}{void} RDI(Connector** bis)}
+\DoxyCodeLine{207         \{}
+\DoxyCodeLine{208             \textcolor{keywordflow}{if}(bis == 0) \textcolor{keywordflow}{return}; \textcolor{comment}{// Código defensivo}}
+\DoxyCodeLine{209             Nodo* nodoBis = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(*bis);}
+\DoxyCodeLine{210 }
+\DoxyCodeLine{211             Nodo* antiguoPadre = \textcolor{keyword}{dynamic\_cast<}Nodo * \textcolor{keyword}{>}(nodoBis-\/>hijos[1]);}
+\DoxyCodeLine{212             Nodo* nuevoPadre = \textcolor{keyword}{dynamic\_cast<}Nodo * \textcolor{keyword}{>}(antiguoPadre-\/>hijos[0]);}
+\DoxyCodeLine{213 }
+\DoxyCodeLine{214             nodoBis-\/>hijos[1] = nuevoPadre-\/>hijos[0];}
+\DoxyCodeLine{215             antiguoPadre-\/>hijos[0] = nuevoPadre-\/>hijos[1];}
+\DoxyCodeLine{216             nuevoPadre-\/>hijos[0] = (* bis);}
+\DoxyCodeLine{217             nuevoPadre-\/>hijos[1] = antiguoPadre;}
+\DoxyCodeLine{218             }
+\DoxyCodeLine{219             (*bis) = nuevoPadre;}
+\DoxyCodeLine{220             RC(nuevoPadre);}
+\DoxyCodeLine{221 }
+\DoxyCodeLine{222             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{223         \}}
+\DoxyCodeLine{228         \textcolor{keywordtype}{void} RDD(Connector** bis)}
+\DoxyCodeLine{229         \{}
+\DoxyCodeLine{230             \textcolor{keywordflow}{if}(bis == 0) \textcolor{keywordflow}{return}; \textcolor{comment}{// Código defensivo}}
+\DoxyCodeLine{231             Nodo* nodoBis = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(*bis);}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233             Nodo * antiguoPadre = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(nodoBis-\/>hijos[0]);}
+\DoxyCodeLine{234             Nodo * nuevoPadre = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(antiguoPadre-\/>hijos[1]);}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236             nodoBis-\/>hijos[0] = nuevoPadre-\/>hijos[1];}
+\DoxyCodeLine{237             antiguoPadre-\/>hijos[1] = nuevoPadre-\/>hijos[0];}
+\DoxyCodeLine{238             nuevoPadre-\/>hijos[1] = (*bis);}
+\DoxyCodeLine{239             nuevoPadre-\/>hijos[0] = antiguoPadre;}
+\DoxyCodeLine{240             }
+\DoxyCodeLine{241             (*bis) = nuevoPadre;}
+\DoxyCodeLine{242             RC(nuevoPadre);}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{245         \}}
+\DoxyCodeLine{246 }
+\DoxyCodeLine{251         \textcolor{keywordtype}{void} RC(Nodo* padre)}
+\DoxyCodeLine{252         \{}
+\DoxyCodeLine{253             \textcolor{comment}{// std::cout << "{}ENTRANDO A RC"{} << std::endl;}}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255             \textcolor{keywordflow}{if}(padre == 0) \textcolor{keywordflow}{return}; \textcolor{comment}{// Código defensivo}}
+\DoxyCodeLine{256             padre -\/> color = Nodo::negro;}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258             \textcolor{comment}{// Se asume que los castings son seguros porque se asume que ambos hijos existen, y son nodos}}
+\DoxyCodeLine{259             \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(padre-\/>hijos[Nodo::ladoIzquierdo]) -\/> color = Nodo::rojo;}
+\DoxyCodeLine{260             \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(padre-\/>hijos[Nodo::ladoDerecho]) -\/> color = Nodo::rojo;}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262             \textcolor{comment}{// std::cout << "{}RC EXITOSO"{} << std::endl;}}
+\DoxyCodeLine{263         \}}
+\DoxyCodeLine{264 }
+\DoxyCodeLine{270         \textcolor{keywordtype}{char} verificarRotacion(Connector** bisabuelo)}
+\DoxyCodeLine{271         \{}
+\DoxyCodeLine{272             Nodo* padre = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(*bisabuelo);}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274             \textcolor{keywordflow}{if}(padre-\/>hijos[0] -\/> tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{275             \{                   }
+\DoxyCodeLine{276                 Nodo* nodoHijoIzquierdo = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(padre-\/>hijos[0]);}
+\DoxyCodeLine{277 }
+\DoxyCodeLine{278                 \textcolor{keywordflow}{if}(nodoHijoIzquierdo-\/> color == ArbolRojoNegro::Connector::rojo) \textcolor{comment}{// Nodo hijo izquierdo es rojo}}
+\DoxyCodeLine{279                 \{}
+\DoxyCodeLine{280                     \textcolor{keywordflow}{if}(nodoHijoIzquierdo -\/> hijos[0] -\/> tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{281                     \{               }
+\DoxyCodeLine{282                         Nodo* nietoHijoIzquierdo = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(nodoHijoIzquierdo-\/>hijos[0]);}
+\DoxyCodeLine{283 }
+\DoxyCodeLine{284                         \textcolor{keywordflow}{if}(nietoHijoIzquierdo-\/> color == ArbolRojoNegro::Connector::rojo) \textcolor{keywordflow}{return} char(2);   \textcolor{comment}{// hijo izquierdo del hijo izquierdo es rojo }}
+\DoxyCodeLine{285                         \textcolor{comment}{// rotacion simple derecha}}
+\DoxyCodeLine{286                     \}}
+\DoxyCodeLine{287                     }
+\DoxyCodeLine{288                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(nodoHijoIzquierdo -\/> hijos[1] -\/> tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{289                     \{               }
+\DoxyCodeLine{290                         Nodo* nietoHijoDerecho = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(nodoHijoIzquierdo-\/>hijos[1]);}
+\DoxyCodeLine{291 }
+\DoxyCodeLine{292                         \textcolor{keywordflow}{if}(nietoHijoDerecho-\/> color == ArbolRojoNegro::Connector::rojo) \textcolor{keywordflow}{return} char(4); \textcolor{comment}{// hijo derecho del hijo izquierdo es rojo }}
+\DoxyCodeLine{293                         \textcolor{comment}{// rotacion doble derecha}}
+\DoxyCodeLine{294                     \}}
+\DoxyCodeLine{295                 \}}
+\DoxyCodeLine{296             \} }
+\DoxyCodeLine{297             }
+\DoxyCodeLine{298             \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(padre-\/>hijos[1] -\/> tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{299             \{}
+\DoxyCodeLine{300                 Nodo* nodoHijoDerecho = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(padre-\/>hijos[1]);}
+\DoxyCodeLine{301 }
+\DoxyCodeLine{302                 \textcolor{keywordflow}{if}(nodoHijoDerecho-\/> color == ArbolRojoNegro::Connector::rojo) \textcolor{comment}{// Nodo hijo derecho es rojo}}
+\DoxyCodeLine{303                 \{}
+\DoxyCodeLine{304                     \textcolor{keywordflow}{if}(nodoHijoDerecho -\/> hijos[0] -\/> tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{305                     \{               }
+\DoxyCodeLine{306                         Nodo* nietoHijoIzquierdo = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(nodoHijoDerecho-\/>hijos[0]);}
+\DoxyCodeLine{307 }
+\DoxyCodeLine{308                         \textcolor{keywordflow}{if}(nietoHijoIzquierdo-\/> color == ArbolRojoNegro::Connector::rojo) \textcolor{keywordflow}{return} char(3);   \textcolor{comment}{// hijo izquierdo del hijo derecho es rojo }}
+\DoxyCodeLine{309                         \textcolor{comment}{// rotacion doble izquierda}}
+\DoxyCodeLine{310                     \}}
+\DoxyCodeLine{311                     }
+\DoxyCodeLine{312                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(nodoHijoDerecho -\/> hijos[1] -\/> tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{313                     \{               }
+\DoxyCodeLine{314                         Nodo* nietoHijoDerecho = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(nodoHijoDerecho-\/>hijos[1]);}
+\DoxyCodeLine{315 }
+\DoxyCodeLine{316                         \textcolor{keywordflow}{if}(nietoHijoDerecho-\/> color == ArbolRojoNegro::Connector::rojo) \textcolor{keywordflow}{return} char(1); \textcolor{comment}{// hijo derecho del hijo derecho es rojo }}
+\DoxyCodeLine{317                         \textcolor{comment}{// rotacion simple izquierda}}
+\DoxyCodeLine{318                     \}}
+\DoxyCodeLine{319                     }
+\DoxyCodeLine{320                     \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} char(1); \textcolor{comment}{// hijo izquierdo es rojo pero nieto no lo es}}
+\DoxyCodeLine{321                 \}}
+\DoxyCodeLine{322             \} }
+\DoxyCodeLine{323             }
+\DoxyCodeLine{324             \textcolor{comment}{// Si ninguna rotación se debe realizar (el criterio de ninguna se cumple completamente) entonces devolvemos 0}}
+\DoxyCodeLine{325             \textcolor{keywordflow}{return} char(0);}
+\DoxyCodeLine{326         \}}
+\DoxyCodeLine{327 }
+\DoxyCodeLine{328     \textcolor{keyword}{public}:}
+\DoxyCodeLine{329 }
+\DoxyCodeLine{330         \textcolor{keyword}{class }\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}}
+\DoxyCodeLine{331         \{}
+\DoxyCodeLine{332             \textcolor{keyword}{private}:}
+\DoxyCodeLine{333                 Hoja* actual;}
+\DoxyCodeLine{334 }
+\DoxyCodeLine{335             \textcolor{keyword}{public}:}
+\DoxyCodeLine{341                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a2c062b4bdb6e7b26ebddb49fb37f542a}{Iterador}}(Hoja* hojaIterable)}
+\DoxyCodeLine{342                 \{this-\/>actual = hojaIterable;\}}
+\DoxyCodeLine{343                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{\string~Iterador}}()\{\};             }
+\DoxyCodeLine{348                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_aa716f248ab4509c1113d88e919d79eda}{Iterador}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& iteradorCopiable)}
+\DoxyCodeLine{349                 \{this-\/>actual = iteradorCopiable.actual;\}}
+\DoxyCodeLine{350 }
+\DoxyCodeLine{351 }
+\DoxyCodeLine{358                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a34d0879e8a8beea57a9d66456a5e93b1}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& iteradorCopiable)}
+\DoxyCodeLine{359                 \{}
+\DoxyCodeLine{360                     this-\/>actual = iteradorCopiable.actual;}
+\DoxyCodeLine{361                     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{362                 \}}
+\DoxyCodeLine{363                 }
+\DoxyCodeLine{370                 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a55a567499bf495dffaa8ec946386c2cc}{operator==}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& iteradorComparable)}
+\DoxyCodeLine{371                 \{\textcolor{keywordflow}{return} (this-\/>actual == iteradorComparable.actual);\}}
+\DoxyCodeLine{378                 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a7bbdf87011eca08feac193feb3ef392a}{operator!=}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& iteradorComparable)}
+\DoxyCodeLine{379                 \{\textcolor{keywordflow}{return} (this-\/>actual != iteradorComparable.actual);\}}
+\DoxyCodeLine{380 }
+\DoxyCodeLine{387                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a866c557274d068760bc3711febb7ef29}{operator++}}()}
+\DoxyCodeLine{388                 \{}
+\DoxyCodeLine{389                     actual = actual-\/>next;}
+\DoxyCodeLine{390                     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{391                 \}}
+\DoxyCodeLine{400                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a00e3361f43247f07f8ea0d3b17d78029}{operator++}}(\textcolor{keywordtype}{int} x)}
+\DoxyCodeLine{401                 \{}
+\DoxyCodeLine{402                     \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} copia(*\textcolor{keyword}{this});}
+\DoxyCodeLine{403                     actual = actual-\/>next;}
+\DoxyCodeLine{404                     \textcolor{keywordflow}{return} copia;}
+\DoxyCodeLine{405                 \}}
+\DoxyCodeLine{412                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}\& \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a45dc9543e79daf89d3c0c56c24f0e2e9}{operator-\/-\/}}()}
+\DoxyCodeLine{413                 \{}
+\DoxyCodeLine{414                     actual = actual-\/>previous;}
+\DoxyCodeLine{415                     \textcolor{keywordflow}{return} *\textcolor{keyword}{this};}
+\DoxyCodeLine{416                 \}}
+\DoxyCodeLine{425                 \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a36fc8a9c37bcd473240f05527b902194}{operator-\/-\/}}(\textcolor{keywordtype}{int} x)}
+\DoxyCodeLine{426                 \{}
+\DoxyCodeLine{427                     \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} copia(*\textcolor{keyword}{this});}
+\DoxyCodeLine{428                     actual = actual-\/>previous;}
+\DoxyCodeLine{429                     \textcolor{keywordflow}{return} copia;}
+\DoxyCodeLine{430                 \}}
+\DoxyCodeLine{431 }
+\DoxyCodeLine{437                 \textcolor{keyword}{const} V\& \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador_a3afb596e5d91fbab20fc75693a0fd76d}{operator*}}()}
+\DoxyCodeLine{438                 \{\textcolor{keywordflow}{return} this-\/>actual-\/>valor;\}}
+\DoxyCodeLine{439         \};}
+\DoxyCodeLine{440 }
+\DoxyCodeLine{444         \mbox{\hyperlink{class_arbol_rojo_negro_ad4d0049260a526ab76c8a2a4e865635d}{ArbolRojoNegro}}()}
+\DoxyCodeLine{445         \{}
+\DoxyCodeLine{446             raiz = 0;}
+\DoxyCodeLine{447             hojaMinima = 0;}
+\DoxyCodeLine{448         \}}
+\DoxyCodeLine{449 }
+\DoxyCodeLine{455         \mbox{\hyperlink{class_arbol_rojo_negro_a49f134fb0b26b6bebc0e161e7b3143c1}{ArbolRojoNegro}}(\mbox{\hyperlink{class_arbol_rojo_negro}{ArbolRojoNegro}}\&\& otroArbolMovido)}
+\DoxyCodeLine{456         \{}
+\DoxyCodeLine{457             raiz = otroArbolMovido.raiz;}
+\DoxyCodeLine{458             hojaMinima = otroArbolMovido.hojaMinima;}
+\DoxyCodeLine{459 }
+\DoxyCodeLine{460             otroArbolMovido.raiz = 0;}
+\DoxyCodeLine{461         \}}
+\DoxyCodeLine{462 }
+\DoxyCodeLine{466         \mbox{\hyperlink{class_arbol_rojo_negro_a4f7c16c73530fe4bc183d453fbed24e0}{\string~ArbolRojoNegro}}()}
+\DoxyCodeLine{467         \{}
+\DoxyCodeLine{468             \textcolor{comment}{// Desctructor recursivo, en cadena}}
+\DoxyCodeLine{469             \textcolor{keywordflow}{if}(raiz != 0) \textcolor{keyword}{delete} raiz;}
+\DoxyCodeLine{470         \}}
+\DoxyCodeLine{471 }
+\DoxyCodeLine{478         \textcolor{keywordtype}{int} \mbox{\hyperlink{class_arbol_rojo_negro_a07b415c1b0cbfc4e0a4c54a55f957a70}{insertarDato}}(\textcolor{keyword}{const} V\& valor, \textcolor{keyword}{const} K\& llave)}
+\DoxyCodeLine{479         \{}
+\DoxyCodeLine{480             \textcolor{comment}{// Recorrer el arbol, hacer el color flip si se occupa, sino, no}}
+\DoxyCodeLine{481             \textcolor{comment}{// InsertarHoja}}
+\DoxyCodeLine{482             \textcolor{comment}{// Verificar que sea un arbol RN}}
+\DoxyCodeLine{483             \textcolor{comment}{// Si no lo es entonces hacer rotacion y arreglar colores}}
+\DoxyCodeLine{484 }
+\DoxyCodeLine{485             \textcolor{comment}{// Caso trivial 1 -\/> Arbol vacio}}
+\DoxyCodeLine{486             \textcolor{keywordflow}{if}(raiz == 0)}
+\DoxyCodeLine{487             \{}
+\DoxyCodeLine{488                 Hoja* nuevaHoja = \textcolor{keyword}{new} Hoja(valor, llave);}
+\DoxyCodeLine{489 }
+\DoxyCodeLine{490                 raiz = (Connector*) nuevaHoja;}
+\DoxyCodeLine{491                 hojaMinima = nuevaHoja;}
+\DoxyCodeLine{492 }
+\DoxyCodeLine{493                 \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{494             \}}
+\DoxyCodeLine{495 }
+\DoxyCodeLine{496             \textcolor{comment}{// Caso trivial 2 -\/> Llave ya existe en la raiz. Comparacion es segura porque raiz no es nula (caso trivial 1)}}
+\DoxyCodeLine{497             \textcolor{keywordflow}{if}(raiz-\/>llave == llave) \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{498             }
+\DoxyCodeLine{499             \textcolor{comment}{// Caso trivial 3 -\/> Arbol solo tiene 1 hoja. }}
+\DoxyCodeLine{500             \textcolor{comment}{// Comparacion es necesaria porque raiz tiene llave distinta (caso trivial 2), y es segura porque raiz no es nula (caso trivial 1)}}
+\DoxyCodeLine{501             \textcolor{keywordflow}{if}(raiz-\/>tipo == ArbolRojoNegro::Connector::tipoHoja)}
+\DoxyCodeLine{502             \{}
+\DoxyCodeLine{503                 Hoja* nuevaHoja = \textcolor{keyword}{new} Hoja(valor, llave);}
+\DoxyCodeLine{504                 Hoja* raizComoHoja = \textcolor{keyword}{dynamic\_cast<}Hoja*\textcolor{keyword}{>}(raiz); \textcolor{comment}{// Casting es seguro porque raiz era una Hoja}}
+\DoxyCodeLine{505                 Nodo* nuevoNodo;}
+\DoxyCodeLine{506 }
+\DoxyCodeLine{507                 \textcolor{comment}{// En ambos casos el nuevo nodo raíz será negro de una vez}}
+\DoxyCodeLine{508                 nuevoNodo = \textcolor{keyword}{new} Nodo(nuevaHoja, raizComoHoja, ArbolRojoNegro::Connector::negro);}
+\DoxyCodeLine{509 }
+\DoxyCodeLine{510                 \textcolor{keywordflow}{if}(llave < raiz-\/>llave) hojaMinima = nuevaHoja;}
+\DoxyCodeLine{511                 \textcolor{keywordflow}{else} hojaMinima = raizComoHoja;}
+\DoxyCodeLine{512 }
+\DoxyCodeLine{513                 raiz = (Connector*) nuevoNodo;}
+\DoxyCodeLine{514                 \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{515             \}}
+\DoxyCodeLine{516 }
+\DoxyCodeLine{517             \textcolor{comment}{// Casting es seguro, confirmamos que raiz no es nula (caso trivial 1) y es nodo (caso trivial 3)}}
+\DoxyCodeLine{518             Nodo* nodoActual = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(raiz);}
+\DoxyCodeLine{519             \textcolor{keywordtype}{char} ladoActual = 0;}
+\DoxyCodeLine{520             }
+\DoxyCodeLine{521             \textcolor{comment}{// Conocemos si debemos mover a la izquierda o derecha. La comparación es segura porque porque raíz no es nula (caso trivial 1)}}
+\DoxyCodeLine{522             \textcolor{comment}{// Confirmamos que si no es mayor entonces es menor. No puede ser igual (caso trivial 2)}}
+\DoxyCodeLine{523             \textcolor{keywordflow}{if}(llave < raiz-\/>llave) ladoActual = Nodo::ladoIzquierdo;}
+\DoxyCodeLine{524             \textcolor{keywordflow}{else} ladoActual = Nodo::ladoDerecho;}
+\DoxyCodeLine{525 }
+\DoxyCodeLine{526             \textcolor{comment}{// Por estructura del árbol, se garantiza que los hijos de un nodo jamás serán nulos}}
+\DoxyCodeLine{527             \textcolor{comment}{// Quizás deberíamos poner código defensivo aquí, por si acaso}}
+\DoxyCodeLine{528             Connector* connectorHijoActual = nodoActual-\/>hijos[ladoActual];}
+\DoxyCodeLine{529 }
+\DoxyCodeLine{530             \textcolor{comment}{// Caso semi-\/trivial -\/> Connector siguiente es Hoja}}
+\DoxyCodeLine{531             \textcolor{keywordflow}{if}(connectorHijoActual-\/>tipo == ArbolRojoNegro::Connector::tipoHoja)}
+\DoxyCodeLine{532             \{}
+\DoxyCodeLine{533                 \textcolor{comment}{// Subcaso trivial del caso semi-\/trivial -\/> Llave ya existe. }}
+\DoxyCodeLine{534                 \textcolor{comment}{// Comparacion se asume segura porque el hijo connector se asume que no es nulo}}
+\DoxyCodeLine{535                 \textcolor{keywordflow}{if}(connectorHijoActual-\/>llave == llave) \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{536 }
+\DoxyCodeLine{537                 Hoja* nuevaHoja = \textcolor{keyword}{new} Hoja(valor, llave);}
+\DoxyCodeLine{538                 Hoja* hojaHijaActual = \textcolor{keyword}{dynamic\_cast<}Hoja*\textcolor{keyword}{>}(connectorHijoActual);}
+\DoxyCodeLine{539                 Nodo* nuevoNodo = \textcolor{keyword}{new} Nodo(hojaHijaActual, nuevaHoja, ArbolRojoNegro::Connector::rojo);}
+\DoxyCodeLine{540 }
+\DoxyCodeLine{541                 nodoActual-\/>hijos[ladoActual] = (Connector*) nuevoNodo;}
+\DoxyCodeLine{542                 \textcolor{keywordflow}{if}(llave < hojaMinima-\/>llave) hojaMinima = nuevaHoja;}
+\DoxyCodeLine{543 }
+\DoxyCodeLine{544                 \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{545             \}}
+\DoxyCodeLine{546 }
+\DoxyCodeLine{547             \textcolor{comment}{// Caso de solución iterativa -\/> Connector siguiente es un nodo}}
+\DoxyCodeLine{548             \textcolor{comment}{// Casting cada ciclo es seguro, porque se garantiza que el conector siguiente es un nodo}}
+\DoxyCodeLine{549 }
+\DoxyCodeLine{550             \textcolor{comment}{// Vamos a descender en el árbol hasta el hijo correspondiente al nodo actual sea una hoja}}
+\DoxyCodeLine{551             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} bandera = 0; \textcolor{comment}{// Existe un desfase de dos entre el nodo actual y el bisabuelo, no todas las iteraciones determinan el bisabuelo}}
+\DoxyCodeLine{552             Connector** bis = 0; \textcolor{comment}{// Ubicación del bisasbuelo}}
+\DoxyCodeLine{553             Connector** bis\_desfasado = 0; \textcolor{comment}{// Bis desfasado 1 paso}}
+\DoxyCodeLine{554             \textcolor{keywordtype}{char} lado\_desfasado\_1 = 0; \textcolor{comment}{// Lado desfasado 1 paso}}
+\DoxyCodeLine{555             }
+\DoxyCodeLine{556             \textcolor{keywordflow}{while}(connectorHijoActual-\/>tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{557             \{}
+\DoxyCodeLine{558                 \textcolor{comment}{// std::cout << "{}Es hora de descender!"{} << std::endl;}}
+\DoxyCodeLine{559                 \textcolor{comment}{// Antes de descender, verificaremos si ambos hermanos son rojos, si acaso es necesario realizar un color flip en el nodo actual}}
+\DoxyCodeLine{560                 Connector* hermanoTemporal;}
+\DoxyCodeLine{561                 \textcolor{keywordflow}{if}(ladoActual == Nodo::ladoIzquierdo) hermanoTemporal = nodoActual-\/>hijos[Nodo::ladoDerecho];}
+\DoxyCodeLine{562                 \textcolor{keywordflow}{else} hermanoTemporal = nodoActual-\/>hijos[Nodo::ladoIzquierdo];}
+\DoxyCodeLine{563 }
+\DoxyCodeLine{564                 \textcolor{keywordflow}{if}(hermanoTemporal-\/>tipo == ArbolRojoNegro::Connector::tipoNodo) \textcolor{comment}{// Comparación es segura porque la estructura del árbol evita connectores nulos}}
+\DoxyCodeLine{565                 \{}
+\DoxyCodeLine{566                     \textcolor{comment}{// std::cout << "{}HAY NODO HERMANO"{} << std::endl;}}
+\DoxyCodeLine{567                     \textcolor{comment}{// Castings son seguros porque se garantizó que ambos conectores existen y son nodos}}
+\DoxyCodeLine{568                     Nodo* nodoHermano = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(hermanoTemporal);}
+\DoxyCodeLine{569                     Nodo* nodoHijo = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(connectorHijoActual);}
+\DoxyCodeLine{570 }
+\DoxyCodeLine{571                     \textcolor{keywordflow}{if}(nodoHermano-\/>color == Nodo::rojo \&\& nodoHijo-\/>color == Nodo::rojo) }
+\DoxyCodeLine{572                     \{}
+\DoxyCodeLine{573                         \textcolor{comment}{// std::cout << "{}Es hora de hacer color flip!"{} << std::endl;}}
+\DoxyCodeLine{574                         CF(nodoActual);}
+\DoxyCodeLine{575                     \}}
+\DoxyCodeLine{576                 \}}
+\DoxyCodeLine{577 }
+\DoxyCodeLine{578                 \textcolor{comment}{// Ahora sí, podemos descender.}}
+\DoxyCodeLine{579                 \textcolor{keywordflow}{if}(bandera == 0) \textcolor{comment}{// El primer descenso es especial, está garantizado, y se conoce el bisabuelo, pues es la dirección de la raíz}}
+\DoxyCodeLine{580                 \{}
+\DoxyCodeLine{581                     \textcolor{comment}{// std::cout << "{}-\/> bandera es 0"{} << std::endl;}}
+\DoxyCodeLine{582                     bis = \&raiz;}
+\DoxyCodeLine{583                     lado\_desfasado\_1 = ladoActual;}
+\DoxyCodeLine{584 }
+\DoxyCodeLine{585                     bandera += 1;}
+\DoxyCodeLine{586                 \}}
+\DoxyCodeLine{587                 \textcolor{keywordflow}{else} \textcolor{comment}{// El resto de descensos son fácilmente iterables}}
+\DoxyCodeLine{588                 \{}
+\DoxyCodeLine{589                     \textcolor{comment}{// std::cout << "{}-\/> bandera es > 0"{} << std::endl;}}
+\DoxyCodeLine{590                     bis\_desfasado = bis;}
+\DoxyCodeLine{591                     bis = \&(\textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(*bis\_desfasado)-\/>hijos[lado\_desfasado\_1]);}
+\DoxyCodeLine{592 }
+\DoxyCodeLine{593                     lado\_desfasado\_1 = ladoActual;}
+\DoxyCodeLine{594                 \}}
+\DoxyCodeLine{595 }
+\DoxyCodeLine{596                 nodoActual = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(connectorHijoActual);}
+\DoxyCodeLine{597 }
+\DoxyCodeLine{598                 \textcolor{comment}{// std::cout << "{}-\/> raiz apunta a "{} << (*raiz).llave << std::endl;}}
+\DoxyCodeLine{599                 \textcolor{comment}{// std::cout << "{}-\/> bis apunta a "{} << (*bis)-\/>llave << std::endl;}}
+\DoxyCodeLine{600                 \textcolor{comment}{// std::cout << "{}-\/> nodo actual es "{} << nodoActual-\/>llave << std::endl;}}
+\DoxyCodeLine{601                 \textcolor{comment}{// std::cout << "{}-\/> hijo izq es "{} << nodoActual-\/>hijos[Nodo::ladoIzquierdo]-\/>llave << std::endl;}}
+\DoxyCodeLine{602                 \textcolor{comment}{// std::cout << "{}-\/> hijo der es "{} << nodoActual-\/>hijos[Nodo::ladoDerecho]-\/>llave << std::endl;}}
+\DoxyCodeLine{603 }
+\DoxyCodeLine{604                 \textcolor{keywordflow}{if}(llave == nodoActual-\/>llave) \textcolor{keywordflow}{return} 0; \textcolor{comment}{// Llave preexistente, no vale la pena seguir bajando}}
+\DoxyCodeLine{605 }
+\DoxyCodeLine{606                 \textcolor{keywordflow}{if}(llave < nodoActual-\/>llave) ladoActual = Nodo::ladoIzquierdo;}
+\DoxyCodeLine{607                 \textcolor{keywordflow}{else} ladoActual = Nodo::ladoDerecho;}
+\DoxyCodeLine{608 }
+\DoxyCodeLine{609                 connectorHijoActual = nodoActual-\/>hijos[ladoActual];}
+\DoxyCodeLine{610 }
+\DoxyCodeLine{611                 \textcolor{comment}{// std::cout << "{}-\/> hijo actual ahora es "{} << connectorHijoActual-\/>llave << std::endl;}}
+\DoxyCodeLine{612                 \textcolor{comment}{// std::cout << "{}-\/> hijo actual ahora es "{};}}
+\DoxyCodeLine{613                 \textcolor{comment}{// if(connectorHijoActual-\/>tipo == ArbolRojoNegro::Connector::tipoHoja) std::cout << "{}UNA HOJA"{} << std::endl;}}
+\DoxyCodeLine{614                 \textcolor{comment}{// else std::cout << "{}UN NODO"{} << std::endl;}}
+\DoxyCodeLine{615             \}}
+\DoxyCodeLine{616 }
+\DoxyCodeLine{617             \textcolor{comment}{// std::cout << "{}Es hora de insertar!"{} << std::endl;}}
+\DoxyCodeLine{618 }
+\DoxyCodeLine{619             \textcolor{comment}{// Tenemos que el connector siguiente es una hoja, y podemos realizar una inserción}}
+\DoxyCodeLine{620             \textcolor{keywordflow}{if}(llave == connectorHijoActual-\/>llave) \textcolor{keywordflow}{return} 0; \textcolor{comment}{// Llave ya preexistente}}
+\DoxyCodeLine{621 }
+\DoxyCodeLine{622             Hoja* hojaHijaActual = \textcolor{keyword}{dynamic\_cast<}Hoja*\textcolor{keyword}{>}(connectorHijoActual);}
+\DoxyCodeLine{623             Hoja* nuevaHoja = \textcolor{keyword}{new} Hoja(valor, llave);}
+\DoxyCodeLine{624             Nodo* nuevoNodo = \textcolor{keyword}{new} Nodo(nuevaHoja, hojaHijaActual, ArbolRojoNegro::Connector::rojo);}
+\DoxyCodeLine{625 }
+\DoxyCodeLine{626             nodoActual-\/>hijos[ladoActual] = (Connector*) nuevoNodo;}
+\DoxyCodeLine{627             \textcolor{keywordflow}{if}(llave < hojaMinima-\/>llave) hojaMinima = nuevaHoja;}
+\DoxyCodeLine{628 }
+\DoxyCodeLine{629             \textcolor{comment}{// std::cout << "{}Es hora de verificar rotaciones!"{} << std::endl;}}
+\DoxyCodeLine{630 }
+\DoxyCodeLine{631             \textcolor{comment}{// Realizamos la rotación necesaria, si acaso}}
+\DoxyCodeLine{632             \textcolor{keywordtype}{char} codigoRotacion = verificarRotacion(bis);}
+\DoxyCodeLine{633             \textcolor{comment}{// std::cout << "{}Rotaciones verificadas!"{} << std::endl;}}
+\DoxyCodeLine{634 }
+\DoxyCodeLine{635             \textcolor{keywordflow}{switch} (codigoRotacion)}
+\DoxyCodeLine{636             \{}
+\DoxyCodeLine{637                 \textcolor{keywordflow}{case} char(0):}
+\DoxyCodeLine{638                     \textcolor{comment}{// std::cout << "{}NO HAY QUE HACER NADA"{} << std::endl;}}
+\DoxyCodeLine{639                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{640 }
+\DoxyCodeLine{641                 \textcolor{keywordflow}{case} char(1):}
+\DoxyCodeLine{642                     \textcolor{comment}{// std::cout << "{}-\/> rotacion simple izquierda"{} << std::endl;}}
+\DoxyCodeLine{643                     RSI(bis);}
+\DoxyCodeLine{644                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{645 }
+\DoxyCodeLine{646                 \textcolor{keywordflow}{case} char(2):}
+\DoxyCodeLine{647                     \textcolor{comment}{// std::cout << "{}-\/> rotacion simple derecha"{} << std::endl;}}
+\DoxyCodeLine{648                     RSD(bis);}
+\DoxyCodeLine{649                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{650 }
+\DoxyCodeLine{651                 \textcolor{keywordflow}{case} char(3):}
+\DoxyCodeLine{652                     \textcolor{comment}{// std::cout << "{}-\/> rotacion doble izquierda"{} << std::endl;}}
+\DoxyCodeLine{653                     RDI(bis);}
+\DoxyCodeLine{654                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{655 }
+\DoxyCodeLine{656                 \textcolor{keywordflow}{case} char(4):}
+\DoxyCodeLine{657                     \textcolor{comment}{// std::cout << "{}-\/> rotacion doble derecha"{} << std::endl;}}
+\DoxyCodeLine{658                     RDD(bis);}
+\DoxyCodeLine{659                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{660                 }
+\DoxyCodeLine{661                 \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{662                     \textcolor{comment}{// std::cout << "{}CODIGO INVALIDO"{} << std::endl;}}
+\DoxyCodeLine{663                     \textcolor{keywordflow}{break};}
+\DoxyCodeLine{664             \}}
+\DoxyCodeLine{665 }
+\DoxyCodeLine{666             \textcolor{keywordflow}{return} 1;}
+\DoxyCodeLine{667         \}}
+\DoxyCodeLine{673         \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_a8b5cbe7c39e13290aa21c3f163f33e7c}{find}}(\textcolor{keyword}{const} K\& llave)\textcolor{keyword}{ const}}
+\DoxyCodeLine{674 \textcolor{keyword}{        }\{}
+\DoxyCodeLine{675             \textcolor{keywordflow}{if}(raiz == 0) \textcolor{keywordflow}{return} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}(0); \textcolor{comment}{// Caso trivial, la raiz es nula, no se puede buscar}}
+\DoxyCodeLine{676 }
+\DoxyCodeLine{677             Connector* actual = raiz;}
+\DoxyCodeLine{678             \textcolor{keywordflow}{while}(actual-\/>tipo == ArbolRojoNegro::Connector::tipoNodo)}
+\DoxyCodeLine{679             \{}
+\DoxyCodeLine{680                 Nodo* nodoActual = \textcolor{keyword}{dynamic\_cast<}Nodo*\textcolor{keyword}{>}(actual); \textcolor{comment}{// Este casting es seguro porque este connector es un nodo}}
+\DoxyCodeLine{681                 \textcolor{keywordtype}{char} ladoActual = 0;}
+\DoxyCodeLine{682                 }
+\DoxyCodeLine{683                 \textcolor{keywordflow}{if}(actual-\/>llave < llave) ladoActual = Nodo::ladoDerecho;}
+\DoxyCodeLine{684                 \textcolor{keywordflow}{else} ladoActual = Nodo::ladoIzquierdo;}
+\DoxyCodeLine{685 }
+\DoxyCodeLine{686                 \textcolor{comment}{// std::cout << "{}Llave recibida es "{} << llave << std::endl;}}
+\DoxyCodeLine{687                 \textcolor{comment}{// std::cout << "{}Llave de connector actual es "{} << actual-\/>llave << std::endl;}}
+\DoxyCodeLine{688                 }
+\DoxyCodeLine{689                 \textcolor{comment}{// std::cout << "{}Color de conector actual es "{};}}
+\DoxyCodeLine{690                 \textcolor{comment}{// if(nodoActual-\/>color == Nodo::negro) std::cout << "{}NEGRO"{} << std::endl;}}
+\DoxyCodeLine{691                 \textcolor{comment}{// else std::cout << "{}ROJO"{} << std::endl;}}
+\DoxyCodeLine{692 }
+\DoxyCodeLine{693                 \textcolor{comment}{// std::cout << "{}Lado que vamos a tomar es "{};}}
+\DoxyCodeLine{694                 \textcolor{comment}{// if(ladoActual == Nodo::ladoIzquierdo) std::cout << "{}IZQUIERDO"{} << std::endl;}}
+\DoxyCodeLine{695                 \textcolor{comment}{// else std::cout << "{}DERECHO"{} << std::endl;}}
+\DoxyCodeLine{696 }
+\DoxyCodeLine{697                 \textcolor{comment}{// El nuevo conector actual va a ser el hijo de este conector actual, según el lado elegido mediante la llave}}
+\DoxyCodeLine{698                 actual = nodoActual-\/>hijos[ladoActual];}
+\DoxyCodeLine{699             \}}
+\DoxyCodeLine{700 }
+\DoxyCodeLine{701             \textcolor{comment}{// Si llegamos a la hoja y la llave coincide, encontramos el valor}}
+\DoxyCodeLine{702             \textcolor{keywordflow}{if}(actual-\/>llave == llave) \textcolor{keywordflow}{return} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}(\textcolor{keyword}{dynamic\_cast<}Hoja *\textcolor{keyword}{>}(actual)); \textcolor{comment}{// Este casting es seguro porque este connector es una hoja}}
+\DoxyCodeLine{703             \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}(0); \textcolor{comment}{// Si no, retornamos un iterador a dirección de hoja nula}}
+\DoxyCodeLine{704 \}}
+\DoxyCodeLine{710         \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_abfdb0db7b834eccdf2828660d94486ab}{begin}}()}
+\DoxyCodeLine{711         \{\textcolor{keywordflow}{return} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}(hojaMinima);\}}
+\DoxyCodeLine{717         \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_a9983e24aad61b91ea031f160185da689}{end}}()}
+\DoxyCodeLine{718         \{\textcolor{keywordflow}{return} \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}(0);\}}
+\DoxyCodeLine{719 \};}
+\DoxyCodeLine{720 }
+\DoxyCodeLine{721 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,128 @@
+\hypertarget{class_arbol_rojo_negro}{}\doxysection{Arbol\+Rojo\+Negro\texorpdfstring{$<$}{<} K, V \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_arbol_rojo_negro}\index{ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}}
+
+
+Collaboration diagram for Arbol\+Rojo\+Negro\texorpdfstring{$<$}{<} K, V \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{class_arbol_rojo_negro__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_arbol_rojo_negro_ad4d0049260a526ab76c8a2a4e865635d}\label{class_arbol_rojo_negro_ad4d0049260a526ab76c8a2a4e865635d}} 
+{\bfseries Arbol\+Rojo\+Negro} ()
+\begin{DoxyCompactList}\small\item\em Constructor por omision de \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_arbol_rojo_negro_a49f134fb0b26b6bebc0e161e7b3143c1}{Arbol\+Rojo\+Negro}} (\mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}} \&\&otro\+Arbol\+Movido)
+\begin{DoxyCompactList}\small\item\em Constructor por r-\/value de \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_arbol_rojo_negro_a4f7c16c73530fe4bc183d453fbed24e0}\label{class_arbol_rojo_negro_a4f7c16c73530fe4bc183d453fbed24e0}} 
+{\bfseries $\sim$\+Arbol\+Rojo\+Negro} ()
+\begin{DoxyCompactList}\small\item\em Destructor de \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_arbol_rojo_negro_a07b415c1b0cbfc4e0a4c54a55f957a70}{insertar\+Dato}} (const V \&valor, const K \&llave)
+\begin{DoxyCompactList}\small\item\em Inserta un dato en el arbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_a8b5cbe7c39e13290aa21c3f163f33e7c}{find}} (const K \&llave) const
+\begin{DoxyCompactList}\small\item\em El metodo find permite buscar un elemento en el arbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_abfdb0db7b834eccdf2828660d94486ab}{begin}} ()
+\begin{DoxyCompactList}\small\item\em Retorna un \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} que apunta a la primera hoja (la de menor valor) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro_a9983e24aad61b91ea031f160185da689}{end}} ()
+\begin{DoxyCompactList}\small\item\em Retorna un \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} que apunta al final (nulo) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_arbol_rojo_negro_a49f134fb0b26b6bebc0e161e7b3143c1}\label{class_arbol_rojo_negro_a49f134fb0b26b6bebc0e161e7b3143c1}} 
+\index{ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}!ArbolRojoNegro@{ArbolRojoNegro}}
+\index{ArbolRojoNegro@{ArbolRojoNegro}!ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}}
+\doxysubsubsection{\texorpdfstring{ArbolRojoNegro()}{ArbolRojoNegro()}}
+{\footnotesize\ttfamily template$<$class K , class V $>$ \\
+\mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}$<$ K, V $>$\mbox{\hyperlink{class_arbol_rojo_negro}{\+::\+Arbol\+Rojo\+Negro}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}$<$ K, V $>$ \&\&}]{otro\+Arbol\+Movido }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor por r-\/value de \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em otro\+Arbol\+Movido} & r-\/value de arbol cuyos recursos queremos robar Utilizado para robar recursos de un r-\/value tras un move \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_arbol_rojo_negro_abfdb0db7b834eccdf2828660d94486ab}\label{class_arbol_rojo_negro_abfdb0db7b834eccdf2828660d94486ab}} 
+\index{ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}!begin@{begin}}
+\index{begin@{begin}!ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily template$<$class K , class V $>$ \\
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}$<$ K, V $>$\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retorna un \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} que apunta a la primera hoja (la de menor valor) 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} que apunta a la primera hoja 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_arbol_rojo_negro_a9983e24aad61b91ea031f160185da689}\label{class_arbol_rojo_negro_a9983e24aad61b91ea031f160185da689}} 
+\index{ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}!end@{end}}
+\index{end@{end}!ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily template$<$class K , class V $>$ \\
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}$<$ K, V $>$\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retorna un \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} que apunta al final (nulo) 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} nulo 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_arbol_rojo_negro_a8b5cbe7c39e13290aa21c3f163f33e7c}\label{class_arbol_rojo_negro_a8b5cbe7c39e13290aa21c3f163f33e7c}} 
+\index{ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}!find@{find}}
+\index{find@{find}!ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}}
+\doxysubsubsection{\texorpdfstring{find()}{find()}}
+{\footnotesize\ttfamily template$<$class K , class V $>$ \\
+\mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Iterador}} \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}$<$ K, V $>$\+::find (\begin{DoxyParamCaption}\item[{const K \&}]{llave }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+El metodo find permite buscar un elemento en el arbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em llave} & llave es el unico parametro que recibe el metodo find, es la llave que se tiene que buscar en el arbol para saber si ya existe un elemento en arbol con la misma llave \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+El metodo find devuelve un \mbox{\hyperlink{class_arbol_rojo_negro_1_1_iterador}{Arbol\+Rojo\+Negro\+::\+Iterador}} que apunta a la hoja del arbol que contiene el elemento con la llave dada, si no se encontra un elemento con la misma llave entonces signica que no existe en el arbol y por lo tanto devuelve un puntero que apunta a 0 (dirreción hoja nula) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_arbol_rojo_negro_a07b415c1b0cbfc4e0a4c54a55f957a70}\label{class_arbol_rojo_negro_a07b415c1b0cbfc4e0a4c54a55f957a70}} 
+\index{ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}!insertarDato@{insertarDato}}
+\index{insertarDato@{insertarDato}!ArbolRojoNegro$<$ K, V $>$@{ArbolRojoNegro$<$ K, V $>$}}
+\doxysubsubsection{\texorpdfstring{insertarDato()}{insertarDato()}}
+{\footnotesize\ttfamily template$<$class K , class V $>$ \\
+int \mbox{\hyperlink{class_arbol_rojo_negro}{Arbol\+Rojo\+Negro}}$<$ K, V $>$\+::insertar\+Dato (\begin{DoxyParamCaption}\item[{const V \&}]{valor,  }\item[{const K \&}]{llave }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Inserta un dato en el arbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em valor} & Valor del dato que se inserta \\
+\hline
+{\em llave} & LLave del dato que se inserta \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Arbol\+Rojo\+Negro.\+h\end{DoxyCompactItemize}
